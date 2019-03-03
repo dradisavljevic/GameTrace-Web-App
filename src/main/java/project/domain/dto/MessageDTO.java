@@ -1,7 +1,6 @@
 package project.domain.dto;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

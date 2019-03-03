@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import project.domain.GameGroup;
-import project.repository.GameDeveloperRepository;
 import project.repository.GameGroupRepository;
 
 @Service

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import project.domain.Earned;
-import project.repository.AdministratorRepository;
 import project.repository.EarnedRepository;
 
 @Service

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import project.domain.Item;
-import project.repository.GuideRepository;
 import project.repository.ItemRepository;
 
 @Service

@@ -1,33 +1,21 @@
 package project.service;
 
-import java.sql.CallableStatement;
 import java.sql.Date;
-import java.sql.ResultSetMetaData;
 import java.sql.Timestamp;
-import java.sql.Types;
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaContext;
-import org.springframework.data.jpa.repository.support.DefaultJpaContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-
-import oracle.sql.StructDescriptor;
-import project.GameTraceApplication;
 import project.domain.FriendsInGame;
 import project.domain.Play;
 import project.domain.PlayedGame;
 import project.domain.Player;
 import project.domain.TopGame;
-import project.domain.dto.PlayerDTO;
-import project.repository.MessageRepository;
 import project.repository.PlayRepository;
 
 @Service

@@ -1,7 +1,8 @@
 package project.domain;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Column;
 
 /**
  * The primary key class for the GAME_GROUP database table.

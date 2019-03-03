@@ -1,15 +1,17 @@
 package project.domain;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.math.BigDecimal;
 
-import org.hibernate.annotations.NamedNativeQuery;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import project.domain.dto.PlayerDTO;
-
-import java.math.BigDecimal;
 
 
 /**

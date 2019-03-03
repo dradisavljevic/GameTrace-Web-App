@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import project.domain.Achievement;
-import project.domain.Play;
-import project.domain.TopGame;
 import project.repository.AchievementRepository;
-import project.repository.GameRepository;
 
 @Service
 public class AchievementServiceImpl implements AchievementService {

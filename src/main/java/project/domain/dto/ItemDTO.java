@@ -1,9 +1,5 @@
 package project.domain.dto;
 
-import java.math.BigDecimal;
-
-import javax.persistence.Lob;
-
 public class ItemDTO {
 	
 	private String itemcurr;

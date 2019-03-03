@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import project.domain.Post;
-import project.repository.PlayRepository;
 import project.repository.PostRepository;
 
 @Service

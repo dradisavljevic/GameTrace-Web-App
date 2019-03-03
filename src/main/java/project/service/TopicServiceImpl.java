@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import project.domain.Topic;
-import project.repository.StreamerRepository;
 import project.repository.TopicRepository;
 
 @Service

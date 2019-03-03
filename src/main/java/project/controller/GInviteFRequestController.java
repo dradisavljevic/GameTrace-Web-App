@@ -1,6 +1,5 @@
 package project.controller;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import project.domain.Active;
 import project.domain.FriendRequest;
-import project.domain.GameDeveloper;
 import project.domain.GameGroup;
 import project.domain.GameUser;
 import project.domain.GroupInvite;

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import project.domain.FriendRequest;
-import project.repository.EarnedRepository;
 import project.repository.FriendRequestRepository;
 
 @Service

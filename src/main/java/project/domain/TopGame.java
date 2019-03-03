@@ -6,10 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.EntityResult;
 import javax.persistence.FieldResult;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.NamedQuery;
 import javax.persistence.SqlResultSetMapping;
-import javax.persistence.SqlResultSetMappings;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NamedNativeQueries;

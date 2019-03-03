@@ -8,7 +8,6 @@ import org.springframework.data.repository.Repository;
 
 import project.domain.Earned;
 import project.domain.EarnedPK;
-import project.domain.Game;
 
 public interface EarnedRepository extends Repository<Earned, EarnedPK> {
 	public List<Earned> findAll();

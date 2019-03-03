@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import project.domain.GroupInvite;
-import project.repository.FriendRequestRepository;
 import project.repository.GroupInviteRepository;
 
 @Service

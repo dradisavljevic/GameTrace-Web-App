@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
-import project.domain.FriendRequest;
 import project.domain.GroupInvite;
 
 public interface GroupInviteRepository extends Repository<GroupInvite, Long> {

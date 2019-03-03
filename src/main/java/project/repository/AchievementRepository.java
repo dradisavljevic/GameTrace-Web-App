@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
 import project.domain.Achievement;
-import project.domain.Game;
 
 public interface AchievementRepository extends Repository<Achievement, Long> {
 	

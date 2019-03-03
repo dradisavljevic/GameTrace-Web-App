@@ -1,8 +1,5 @@
 package project.controller;
 
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import project.domain.Active;
 import project.domain.Game;
-import project.domain.GameUser;
 import project.domain.GtUser;
-import project.domain.Guide;
 import project.domain.Play;
 import project.domain.Review;
 import project.domain.dto.GuideKeyDTO;

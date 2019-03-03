@@ -1,8 +1,5 @@
 package project.controller;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,7 +13,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -40,10 +36,8 @@ import project.domain.Game;
 import project.domain.GameDeveloper;
 import project.domain.GameUser;
 import project.domain.GtUser;
-import project.domain.Item;
 import project.domain.Request;
 import project.domain.dto.GameDTO;
-import project.domain.dto.GameUpdateDTO;
 import project.domain.dto.RequestUpdateDTO;
 import project.service.AdministratorService;
 import project.service.GameDeveloperService;

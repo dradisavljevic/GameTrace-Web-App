@@ -1,12 +1,17 @@
 package project.domain;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.sql.Date;
 import java.sql.Timestamp;
+
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 /**

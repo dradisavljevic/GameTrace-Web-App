@@ -2,8 +2,6 @@ package project.service;
 
 import java.util.List;
 
-
-
 import project.domain.TicketAnswer;
 
 public interface TicketAnswerService {

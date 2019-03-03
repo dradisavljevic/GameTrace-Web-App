@@ -4,11 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-
 import project.domain.Message;
-import project.domain.MessagePackage;
 import project.domain.dto.MessageDTO;
 
 public interface MessageService {

@@ -6,15 +6,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.data.jpa.repository.JpaContext;
 
 import project.domain.Game;
 import project.domain.GameDeveloper;
-import project.domain.Play;
-import project.domain.TopGame;
-import project.repository.EarnedRepository;
 import project.repository.GameDeveloperRepository;
 
 @Service

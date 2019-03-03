@@ -1,6 +1,5 @@
 package project.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import project.domain.Review;
-import project.repository.RequestRepository;
 import project.repository.ReviewRepository;
 
 @Service

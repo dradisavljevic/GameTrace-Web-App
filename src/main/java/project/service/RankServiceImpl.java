@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import project.domain.Rank;
-import project.repository.PostRepository;
 import project.repository.RankRepository;
 
 @Service

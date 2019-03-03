@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import project.domain.GameUser;
-import project.repository.GameGroupRepository;
 import project.repository.GameUserRepository;
 
 @Service

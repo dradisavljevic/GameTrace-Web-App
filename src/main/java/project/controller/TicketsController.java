@@ -19,13 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import project.domain.Active;
 import project.domain.Administrator;
-import project.domain.Game;
 import project.domain.GameUser;
-import project.domain.Guide;
 import project.domain.Ticket;
 import project.domain.TicketAnswer;
 import project.domain.dto.AnswerDTO;
-import project.domain.dto.GuideKeyDTO;
 import project.domain.dto.TicketDTO;
 import project.service.AdministratorService;
 import project.service.GameUserService;

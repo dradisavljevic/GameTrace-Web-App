@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 import org.hibernate.annotations.CreationTimestamp;
 

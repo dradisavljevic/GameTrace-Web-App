@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
-import project.domain.Guide;
 import project.domain.Ticket;
 
 public interface TicketRepository extends Repository<Ticket, Long>{

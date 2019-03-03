@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
-
 import project.domain.GameDeveloper;
 
 public interface GameDeveloperRepository extends Repository<GameDeveloper, Long> {

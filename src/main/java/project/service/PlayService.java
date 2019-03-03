@@ -4,15 +4,11 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-
 import project.domain.FriendsInGame;
 import project.domain.Play;
 import project.domain.PlayedGame;
 import project.domain.Player;
 import project.domain.TopGame;
-import project.domain.dto.PlayerDTO;
 
 public interface PlayService {
 

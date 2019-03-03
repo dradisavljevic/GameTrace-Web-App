@@ -3,9 +3,6 @@ package project.service;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-
 import project.domain.GameUser;
 
 public interface GameUserService {

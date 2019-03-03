@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import project.domain.Game;
 import project.domain.Guide;
-import project.repository.GtUserRepository;
 import project.repository.GuideRepository;
 
 @Service

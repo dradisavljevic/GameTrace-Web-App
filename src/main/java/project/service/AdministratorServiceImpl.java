@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import project.domain.Administrator;
-import project.repository.AchievementRepository;
 import project.repository.AdministratorRepository;
 
 @Service

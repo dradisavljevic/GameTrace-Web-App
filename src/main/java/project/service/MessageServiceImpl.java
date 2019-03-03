@@ -12,13 +12,11 @@ import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import project.domain.Achievement;
 import project.domain.GtUser;
 import project.domain.Message;
 import project.domain.MessagePackage;
 import project.domain.dto.MessageDTO;
 import project.repository.GtUserRepository;
-import project.repository.ItemRepository;
 import project.repository.MessageRepository;
 
 @Service

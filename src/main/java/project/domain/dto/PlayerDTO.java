@@ -2,13 +2,6 @@ package project.domain.dto;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Id;
-import javax.persistence.FieldResult;
-import javax.persistence.SqlResultSetMapping;
-import javax.persistence.EntityResult;
-
-import org.hibernate.annotations.NamedNativeQuery;
-
 
 
 
