@@ -8,7 +8,7 @@ Like the client application, this is a part of an old Project that served as of 
 
 Idea was to create a Steam/Xfire-like web application dashboard where you can access all information about the games you've played.
 
-Application works with OracleSQL. Scripts for database initialization are located inside src\main\resources\SQLScripts.
+Application works with OracleSQL. Scripts for database initialization are located inside the [GameTrace SQL](https://github.com/dradisavljevic/GameTrace-SQL) repository.
 
 Before running, replace spring.mail.username and spring.mail.password properties inside application.properties with valid values.
 
