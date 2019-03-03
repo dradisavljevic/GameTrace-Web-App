@@ -1,0 +1,272 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div ng-controller="GameAddController">
+        <script type="text/ng-template" id="myGameContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title"><p align='center'><b>Add New Game</b></p></h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-7">
+
+                        <form class="form-signin" name="gameForm" ng-submit="gameForm.$valid" novalidate>
+
+                            <div class="form-group">
+                                <input ng-model="gamePackage[4]" type="text" class="form-control" placeholder="Game Name:" required></input>
+                            </div>
+                            <label>Release Year:</label>
+                            <select class="form-control" ng-options="year.name for year in gamePackage[0] track by year.id" ng-model="gamePackage[1]"></select>
+                            <br>
+                            <div class="form-group">
+                                <textarea ng-model="gamePackage[5]" class="form-control" rows="5" id="description" placeholder="Game Description:"></textarea>
+                            </div>
+                            <br>
+                            <label>Game Developers:</label>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <select class="form-control" ng-options="dev.gdname for dev in gameDevelopers track by dev.gdid" ng-model="gamePackage[7]"></select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button ng-disabled="gamePackage[8].indexOf(gamePackage[7].gdname)>-1" class="btn btn-success" ng-click="add()">+</button>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button ng-disabled="gamePackage[8].indexOf(gamePackage[7].gdname)==-1" class="btn btn-danger" ng-click="removeDev()">-</button>
+                                </div>
+                            </div>
+                            <div ng-show="gamePackage[8].length">{{ gamePackage[8] }}</div>
+                            <br>
+                            <div class="form-group">
+
+                                <textarea ng-model="gamePackage[6]" class="form-control" rows="7" id="detectionRule" placeholder="Game Detection Rule:
+                  <game> <-Necessary tag
+                  <rule> <-One or More
+                  <proc>ProcessName</proc> <-Exactly One
+                  <file>NecessaryFileName</file> <-One or More
+                  <no>MissingFileName</no> <-Zero or More
+                  <arg>ProcCmdLineArgument</arg> <-Zero or More
+                  <absent>MissingProcCmdLineArg</absent> <-Zero or More
+                  </rule>
+                  </game> <-Necessary tag"></textarea>
+                            </div>
+                            <br>
+                            <h5>Game Image:</h5>
+                            <div class="row">
+                                <div class="col-sm-4 form-group">
+                                    <img id="gameImg" ng-src="{{gamePackage[3]}}" height="150" width="100" />
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <input type="file" id="fileGame" accept="image/*" name="file" style="display: none;" fileread="gamePackage[3]" />
+                                    <div class="form-group">
+                                        <input type="button" class="btn btn-default btn-primary" id="brGButton" value="Browse" onclick="document.getElementById('fileGame').click();" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="button" class="btn btn-default btn-danger" id="resGButton" value="Reset" ng-click="removeImg()" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <fieldset>
+                                <div id="GameAddResult">{{result}}</div>
+                            </fieldset>
+                            <br />
+
+                        </form>
+
+                    </div>
+                    <div class="col-sm-4"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="ok()">Add</button>
+                <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+        <button ng-show="isAdmin()" class="btn btn-default btn-success" ng-click="open()">Add Game</button>
+    </div>
+    <div class="col-sm-8">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-4">Order by (on page):</label>
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <select class="form-control" ng-options="filter.label for filter in gameCtrl.filters track by filter.id" ng-model="gameCtrl.flt_selected">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Ascending" ng-click="gameCtrl.asc()">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Descending" ng-click="gameCtrl.desc()">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Reset" ng-click="gameCtrl.reset()">
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search (by selected above):" ng-model="gameCtrl.filter">
+                <div class="input-group-btn">
+                    <input type="button" class="btn btn-default btn-primary" value="Search" ng-click="gameCtrl.select()">
+                </div>
+            </div>
+        </form>
+        <br/>
+        <div class="pagination-centered" align="center">
+            <ul class="pagination">
+                <li ng-repeat="n in gameCtrl.letters " ng-class="{active: n == gameCtrl.currentLetter}" ng-click="gameCtrl.selectLetter(n)">
+                    <a href ng-bind="n">1</a>
+                </li>
+            </ul>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr ng-show="gameCtrl.display.length>1" align="center">
+                    <td colspan="6">
+                        <div class="pagination-centered" ng-show="gameCtrl.games.length!=0">
+                            <ul class="pagination justify-content-end">
+                                <li ng-class="{disabled: gameCtrl.currentPage == 0}">
+                                    <a href ng-click="gameCtrl.prevPage()">« Prev</a>
+                                </li>
+                                <li ng-repeat="n in gameCtrl.range(gameCtrl.display.length, gameCtrl.currentPage, gameCtrl.currentPage + gameCtrl.gap) " ng-class="{active: n == gameCtrl.currentPage}" ng-click="gameCtrl.setPage(n)" ng-show="n>-1">
+                                    <a href ng-bind="n+1">1</a>
+                                </li>
+                                <li ng-class="{disabled: (gameCtrl.currentPage) == gameCtrl.display.length - 1}">
+                                    <a href ng-click="gameCtrl.nextPage()">Next »</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Release Year</th>
+                </tr>
+            </thead>
+            <tfoot ng-show="gameCtrl.display.length>1" align="center">
+                <td colspan="6">
+                    <div class="pagination-centered" ng-show="gameCtrl.games.length!=0">
+                        <ul class="pagination justify-content-end">
+                            <li ng-class="{disabled: gameCtrl.currentPage == 0}">
+                                <a href ng-click="gameCtrl.prevPage()">« Prev</a>
+                            </li>
+                            <li ng-repeat="n in gameCtrl.range(gameCtrl.display.length, gameCtrl.currentPage, gameCtrl.currentPage + gameCtrl.gap) " ng-class="{active: n == gameCtrl.currentPage}" ng-click="gameCtrl.setPage(n)" ng-show="n>-1">
+                                <a href ng-bind="n+1">1</a>
+                            </li>
+                            <li ng-class="{disabled: (gameCtrl.currentPage) == gameCtrl.display.length - 1}">
+                                <a href ng-click="gameCtrl.nextPage()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tfoot>
+            <tbody>
+                <tr ng-repeat="game in gameCtrl.display[gameCtrl.currentPage] | orderBy:gameCtrl.flt_selected.name:gameCtrl.flt_reverse">
+                    <td><img ng-src="{{game.gimg}}" height="150" width="100" /></td>
+                    <td><img ng-src="{{game.gameicon}}" height="32" width="32" /> {{game.gamename}}</td>
+                    <td>{{game.gamery}}</td>
+                    <td>
+                        <a class="btn btn-primary" ui-sref="games({gamesId: {{game.gameid}} })" ng-click="selectGame(game.gameid); setTab(9)">View</a>
+                    </td>
+                    <td>
+                        <div ng-controller="GameUpdateController">
+                            <script type="text/ng-template" id="updateGameContent.html">
+                                <div class="modal-header">
+                                    <h3 class="modal-title"><p align='center'><b>Update Game</b></p></h3>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-sm-3"></div>
+                                        <div class="col-sm-7">
+
+                                            <form class="form-signin" name="gameForm" ng-submit="gameForm.$valid" novalidate>
+
+                                                <div class="form-group">
+                                                    <input ng-model="gamePackage[4]" type="text" class="form-control" placeholder="Game Name:" required></input>
+                                                </div>
+                                                <label>Release Year:</label>
+                                                <select class="form-control" ng-options="year.name for year in gameYear track by year.id" ng-model="gamePackage[1]"></select>
+                                                <br>
+                                                <div class="form-group">
+                                                    <textarea ng-model="gamePackage[5]" class="form-control" rows="5" id="description" placeholder="Game Description:"></textarea>
+                                                </div>
+                                                <br>
+                                                <label>Game Developers:</label>
+                                                <div class="row">
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control" ng-options="dev.gdname for dev in gameDevelopers track by dev.gdid" ng-model="gamePackage[7]"></select>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button ng-disabled="gamePackage[8].indexOf(gamePackage[7].gdname)>-1" class="btn btn-success" ng-click="add()">+</button>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button ng-disabled="gamePackage[8].indexOf(gamePackage[7].gdname)==-1" class="btn btn-danger" ng-click="removeDev()">-</button>
+                                                    </div>
+                                                </div>
+                                                <div ng-show="gamePackage[8].length">{{ gamePackage[8] }}</div>
+                                                <br>
+                                                <div class="form-group">
+                                                    <textarea ng-model="gamePackage[6]" class="form-control" rows="7" id="detectionRule" placeholder="Game Detection Rule:
+                                 <game> <-Necessary tag
+                                 <rule> <-One or More
+                                 <proc>ProcessName</proc> <-Exactly One
+                                 <file>NecessaryFileName</file> <-One or More
+                                 <no>MissingFileName</no> <-Zero or More
+                                 <arg>ProcCmdLineArgument</arg> <-Zero or More
+                                 <absent>MissingProcCmdLineArg</absent> <-Zero or More
+                                 </rule>
+                                 </game> <-Necessary tag"></textarea>
+                                                </div>
+                                                <br>
+                                                <h5>Game Image:</h5>
+                                                <div class="row">
+                                                    <div class="col-sm-4 form-group">
+                                                        <img id="gameUpdateImg" ng-src="{{gamePackage[3]}}" height="150" width="100" />
+                                                    </div>
+                                                    <div class="col-sm-4 form-group">
+                                                        <input type="file" id="fileUpdateGame" name="file" accept="image/*" style="display: none;" fileread="gamePackage[3]" />
+                                                        <div class="form-group">
+                                                            <input type="button" class="btn btn-default btn-primary" id="brGButton" value="Browse" onclick="document.getElementById('fileUpdateGame').click();" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input type="button" class="btn btn-default btn-danger" id="resGButton" value="Reset" ng-click="removeImg()" />
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <fieldset>
+                                                    <div id="GameUpdateResult">{{result}}</div>
+                                                </fieldset>
+                                                <br />
+
+                                            </form>
+
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-info" ng-click="ok()">Update</button>
+                                    <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+                                </div>
+                            </script>
+                            <button ng-show="isAdmin()" class="btn btn-default btn-info" ng-click="open(game.gameid)">Update</button>
+                        </div>
+                    </td>
+                    <td>
+                        <button ng-show="isAdmin()" class="btn btn-default btn-danger" ng-really-click="gameCtrl.removeGame(game.gameid)" ng-really-message="Are you sure you want to delete the game {{game.gamename}} ({{game.gamery}})?">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div ng-show="gameCtrl.games.length==0">There are no games available to show</div>
+    </div>
+</body>
+
+</html>

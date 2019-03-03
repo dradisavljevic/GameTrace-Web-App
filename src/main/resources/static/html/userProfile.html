@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-xs-12 col-md-4 col-lg-3">
+            <div class="userProfileInfo">
+                <div class="image text-center">
+                    <img ng-src="{{profCtrl.user.gtUser.uavat}}" height="210" width="140">
+                </div>
+                <div class="box">
+                    <div class="info">
+                        <span><b>Joined on:</b> {{profCtrl.user.gtUser.udate}}</span>
+                        <span><b>Date of Birth:</b> {{profCtrl.user.udob}}</span>
+                        <span><b>Real Name:</b> {{profCtrl.user.rname}}</span>
+                        <span><b>Country:</b> {{profCtrl.user.ucountry}}</span>
+                    </div>
+                </div>
+            </div>
+            <div align="center" ng-controller="UpdateProfile">
+                <script type="text/ng-template" id="updateProfileContent.html">
+                    <div class="modal-header">
+                        <h3 class="modal-title"><p align='center'><b>Update Profile Information</b></p></h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-6">
+
+                                <form class="form-signin" name="registerForm" ng-submit="registerForm.$valid" novalidate>
+
+                                    <label>Country:</label>
+                                    <div class="form-group">
+                                        <select class="form-control" ng-options="type.name for type in profilePackage[0] track by type.id" ng-model="profilePackage[1]"></select>
+                                    </div>
+                                    <br>
+
+                                    <div class="form-group">
+                                        <input ng-model="profilePackage[2]" type="text" class="form-control" placeholder="Real Name:"></input>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <textarea ng-model="profilePackage[4]" class="form-control" rows="5" id="biography" placeholder="Biography"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <h5>Profile Image:</h5>
+                                        <div class="row">
+                                            <div class="col-sm-4 form-group">
+                                                <img id="profileAvatar" ng-src="{{profilePackage[5]}}" height="100" width="100" />
+                                            </div>
+                                            <div class="col-sm-4 form-group">
+                                                <input type="file" id="profileFile" name="file" accept="image/*" style="display: none;" fileread="profilePackage[5]" />
+                                                <div class="form-group">
+                                                    <input type="button" class="btn btn-default btn-primary" id="brButton" value="Browse" onclick="document.getElementById('profileFile').click();" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="button" class="btn btn-default btn-danger" id="resButton" value="Reset" ng-click="removeImg()" />
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <fieldset>
+                                            <div id="ProfileUpdateResult">{{result}}</div>
+                                        </fieldset>
+                                        <br />
+                                </form>
+
+                                </div>
+                                <div class="col-sm-4"></div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-info" ng-click="ok()">Update</button>
+                            <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+                        </div>
+                </script>
+                <button class="btn btn-default btn-info" ng-click="open()">Edit Profile</button>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <h3 align="center">My Latest Achievements:</h3>
+                <hr>
+                <div align="center">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Achievement Name</th>
+                                <th>Condition</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="ach in profCtrl.achievements">
+                                <td>{{ach.achname}}</td>
+                                <td>{{ach.achcond}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-8 col-lg-9">
+                <div class="box">
+                    <div class="col-sm-9">
+                        <div class="tab-content">
+                            <!-- About -->
+                            <div class="userProfileContent">
+                                <div class="i">
+                                    <h2 class="boxHeadline"><b>{{profCtrl.user.uname}}</b></h2>
+                                    <p>{{profCtrl.user.ubio}}</p>
+                                </div>
+                                <hr>
+                                <div class="i">
+                                    <h2 class="boxHeadline"><b>Most Played Games</b></h2>
+                                    <ul class="simpleListings">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Image</th>
+                                                    <th>Name</th>
+                                                    <th>Time</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="played in profCtrl.playedGames">
+                                                    <td><img ng-src="{{played.gimage}}" height="100" width="66" /></td>
+                                                    <td>{{played.gamename}} ({{played.gamery}})</td>
+                                                    <td>{{played.time}}</td>
+                                                    <td>
+                                                        <a class="btn btn-primary" ui-sref="games({gamesId: {{played.gameid}} })" ng-click="selectGame(played.gameid); setTab(9)">View</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div ng-show="profCtrl.playedGames.length==0">You haven't played any games yet</div>
+                                    </ul>
+                                </div>
+                                <hr>
+                                <div class="i">
+                                    <h2 class="boxHeadline"><b>Friends</b></h2>
+                                    <div class="container" background-color="white" vertical-align="middle">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <ul class="horizontal-slide">
+                                                    <li class="col-md-2" ng-repeat="friend in profCtrl.friends">
+                                                        <a ui-sref="users({username: friend.uname })" ng-click="selectUser(friend.uname); setTab(10)"><img height="100" width="100" title="{{friend.uname}}" ng-src="{{friend.gtUser.uavat}}" /></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div ng-show="profCtrl.friends.length==0">Your Friend List is empty</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Activities -->
+                    </div>
+                    <div class="col-sm-3 sidenav">
+                        <h3>Groups</h3>
+                        <ul class="simpleListings">
+                            <li ng-repeat="group in profCtrl.groups"><a ui-sref="groups({groupId: {{group.grid}}, groupGM: group.grgm })" ng-click="selectGroup(group.grid, group.grgm); setTab(17)">{{group.grname}}</a> </li>
+                        </ul>
+                        <div ng-show="profCtrl.groups.length==0">There are no groups available to show </div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>

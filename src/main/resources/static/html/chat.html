@@ -1,0 +1,77 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a style="color: gray !important;">
+                     Friends List
+                     </a>
+                </li>
+                <li ng-repeat="friend in chatCtrl.friends" ng-class="{active:chatCtrl.isSet(friend.uname)}">
+                    <a ng-click="chatCtrl.selectUser(friend.uname)">{{friend.uname}}</a>
+                </li>
+            </ul>
+        </div>
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div ng-show="chatCtrl.home==1">
+                    <h1 align="center">Welcome to your chat room </h1>
+                    <p align="center">Select a user from your friends list to start chatting. Remember to be polite and considerate, so everyone would find this experience enjoyable.</p>
+                </div>
+                <div class="col-sm-9 message_section" ng-show="chatCtrl.home==0">
+                    <div class="row">
+                        <div class="new_message_head">
+                            <div class="pull-left">
+                                <h5> Chat with {{chatCtrl.username}}</h5>
+                            </div>
+                        </div>
+                        <!--new_message_head-->
+                        <div class="chat_area" id="chatbox">
+                            <ul class="list-unstyled">
+                                <div ng-repeat="msg in chatCtrl.messages">
+                                    <li class="left clearfix" ng-show="chatCtrl.username==msg.sender.uname">
+                                        <span class="chat-img1 pull-left">
+                                    <img ng-src="{{msg.sender.uavat}}" alt="User Avatar" class="img-circle">
+                                    </span>
+                                        <div class="chat-body1 clearfix">
+                                            <p>{{msg.msgcont}}</p>
+                                            <div class="chat_time pull-right">received{{msg.msgtime}}</div>
+                                        </div>
+                                    </li>
+                                    <li class="left clearfix admin_chat" ng-show="chatCtrl.username==msg.receiver.uname">
+                                        <span class="chat-img1 pull-right">
+                                    <img ng-src="{{msg.sender.uavat}}" alt="User Avatar" class="img-circle">
+                                    </span>
+                                        <div class="chat-body1 clearfix">
+                                            <p>{{msg.msgcont}}</p>
+                                            <div class="chat_time pull-left">sent{{msg.msgtime}}</div>
+                                        </div>
+                                    </li>
+                                </div>
+                            </ul>
+                        </div>
+                        <!--chat_area-->
+                        <div class="message_write">
+                            <textarea ng-model="chatCtrl.messageContent" class="form-control" placeholder="type a message"></textarea>
+                            <div class="clearfix"></div>
+                            <div class="chat_bottom">
+                                <button class="pull-right btn btn-success" ng-click="chatCtrl.sendMessage()">
+                                    Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--message_section-->
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

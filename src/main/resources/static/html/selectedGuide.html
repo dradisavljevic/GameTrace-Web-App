@@ -1,0 +1,45 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-xs-12 col-md-4 col-lg-3">
+            <div class="userProfileInfo">
+                <div class="image text-center">
+                    <img ng-src="{{guideGame.gimg}}" height="210" width="140">
+                </div>
+                <div class="box">
+                    <div class="name">
+                        <p align="center"><strong><a ui-sref="games({gamesId: guideGame.gameid })" ng-click="selectGame(guideGame.gameid); setTab(9)">{{guideGame.gamename}} ({{guideGame.gamery}})</a></strong></p>
+                    </div>
+                    <div class="info">
+                        <span><b>Added by:</b> <a ui-sref="users({username: selectedGuide.gameUserUname})" ng-click="selectUser(selectedGuide.gameUserUname); setTab(10)"> {{selectedGuide.gameUserUname}} </a></span>
+                    </div>
+                </div>
+            </div>
+            <div align="center" ng-controller="SpecificGuideUpdateController">
+                <button class="btn btn-default btn-info" ng-show="isAuthor(selectedGuide.gameUserUname) || isAdmin()" ng-click="open(selectedGuide.guid, selectedGuide.gameGameid, selectedGuide.gameUserUname)">Update Guide</button>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-8 col-lg-9">
+            <div class="box">
+                <div class="col-sm-9">
+                    <div class="tab-content">
+                        <!-- About -->
+                        <div class="userProfileContent">
+                            <div class="i">
+                                <h1 class="boxHeadline" align="center"><b>{{selectedGuide.guname}}</b></h1>
+                                <p>{{selectedGuide.gucont}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

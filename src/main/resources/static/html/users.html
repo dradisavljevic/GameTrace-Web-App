@@ -1,0 +1,157 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div ng-controller="AdminAddController">
+        <script type="text/ng-template" id="myAdminContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title"><p align='center'><b>Add New Administrator</b></p></h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6">
+
+                        <form class="form-signin" name="adminForm" ng-submit="adminForm.$valid" novalidate>
+
+                            <div class="form-group">
+                                <input ng-model="adminPackage[0]" type="text" class="form-control" placeholder="Username:" required></input>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 form-group">
+                                    <div class="form-group">
+                                        <input ng-model="adminPackage[1]" type="password" class="form-control" placeholder="Password:" required></input>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    <div class="form-group">
+                                        <input ng-model="adminPackage[2]" type="password" class="form-control" placeholder="Repeat password:" required></input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input ng-model="adminPackage[3]" type="email" class="form-control" placeholder="E-mail:" required></input>
+                            </div>
+
+                            <br>
+                            <h5>Profile Image:</h5>
+                            <div class="row">
+                                <div class="col-sm-4 form-group">
+                                    <img id="adminImg" ng-src="{{adminPackage[4]}}" height="100" width="100" />
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <input type="file" id="fileAdmin" name="file" accept="image/*" style="display: none;" fileread="adminPackage[4]" />
+                                    <div class="form-group">
+                                        <input type="button" class="btn btn-default btn-primary" id="brAButton" value="Browse" onclick="document.getElementById('fileAdmin').click();" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="button" class="btn btn-default btn-danger" id="resAButton" value="Reset" ng-click="removeImg()" />
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <fieldset>
+                                <div id="AdminAddResult">{{result}}</div>
+                            </fieldset>
+                            <br />
+
+                        </form>
+
+                    </div>
+                    <div class="col-sm-4"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="ok()">Add</button>
+                <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+        <button class="btn btn-default btn-success" ng-show="isAdmin()" ng-click="open()">Add Administrator</button>
+    </div>
+    <div class="col-sm-8">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-4">Order by Username (on page):</label>
+                <div class="col-sm-2">
+                    <input type="button" class="btn btn-default btn-primary" value="Ascending" ng-click="userCtrl.asc()">
+                </div>
+                <div class="col-sm-2">
+                    <input type="button" class="btn btn-default btn-primary" value="Descending" ng-click="userCtrl.desc()">
+                </div>
+                <div class="col-sm-2">
+                    <input type="button" class="btn btn-default btn-primary" value="Reset" ng-click="userCtrl.reset()">
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search by Username" ng-model="userCtrl.filter">
+                <div class="input-group-btn">
+                    <input type="button" class="btn btn-default btn-primary" value="Search" ng-click="userCtrl.select()">
+                </div>
+            </div>
+        </form>
+        <br/>
+        <table class="table table-hover">
+            <thead>
+                <tr ng-show="userCtrl.display.length>1" align="center">
+                    <td colspan="6">
+                        <div class="pagination-centered" ng-show="userCtrl.users.length!=0">
+                            <ul class="pagination justify-content-end">
+                                <li ng-class="{disabled: userCtrl.currentPage == 0}">
+                                    <a href ng-click="userCtrl.prevPage()">« Prev</a>
+                                </li>
+                                <li ng-repeat="n in userCtrl.range(userCtrl.display.length, userCtrl.currentPage, userCtrl.currentPage + userCtrl.gap) " ng-class="{active: n == userCtrl.currentPage}" ng-click="userCtrl.setPage(n)" ng-show="n>-1">
+                                    <a href ng-bind="n+1">1</a>
+                                </li>
+                                <li ng-class="{disabled: (userCtrl.currentPage) == userCtrl.display.length - 1}">
+                                    <a href ng-click="userCtrl.nextPage()">Next »</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Avatar</th>
+                    <th>Username</th>
+                    <th ng-show="isAdmin()">E-mail</th>
+                </tr>
+            </thead>
+            <tfoot ng-show="userCtrl.display.length>1" align="center">
+                <td colspan="6">
+                    <div class="pagination-centered" ng-show="userCtrl.users.length!=0">
+                        <ul class="pagination justify-content-end">
+                            <li ng-class="{disabled: userCtrl.currentPage == 0}">
+                                <a href ng-click="userCtrl.prevPage()">« Prev</a>
+                            </li>
+                            <li ng-repeat="n in userCtrl.range(userCtrl.display.length, userCtrl.currentPage, userCtrl.currentPage + userCtrl.gap) " ng-class="{active: n == userCtrl.currentPage}" ng-click="userCtrl.setPage(n)" ng-show="n>-1">
+                                <a href ng-bind="n+1">1</a>
+                            </li>
+                            <li ng-class="{disabled: (userCtrl.currentPage) == userCtrl.display.length - 1}">
+                                <a href ng-click="userCtrl.nextPage()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tfoot>
+            <tbody>
+                <tr ng-repeat="user in userCtrl.display[userCtrl.currentPage] | orderBy:userCtrl.flt_selected.name:userCtrl.flt_reverse">
+                    <td><img ng-src="{{user.gtUser.uavat}}" height="100" width="100" /></td>
+                    <td>{{user.uname}}</td>
+                    <td ng-show="isAdmin()">{{user.gtUser.uemail}}</td>
+                    <td>
+                        <a class="btn btn-primary" ui-sref="users({username: user.uname })" ng-click="selectUser(user.uname); setTab(10)">View</a>
+                    </td>
+                    <td>
+                        <button class="btn btn-default btn-danger" ng-show="false" ng-really-click="userCtrl.removeUser(user.uname)" ng-really-message="Are you sure you want to delete the user {{user.uname}}?">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div ng-show="userCtrl.users.length==0">There are no users available to show</div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Operating System Files
+
+*.DS_Store
+Thumbs.db
+*.sw?
+.#*
+*#
+*~
+*.sublime-*
+
+# Build Artifacts
+
+.gradle/
+bin/
+dependency-reduced-pom.xml
+
+# Project specific
+src/main/resources/mailingCredentials.txt
+src/main/resources/static/data/*
+!src/main/resources/static/data/data.txt

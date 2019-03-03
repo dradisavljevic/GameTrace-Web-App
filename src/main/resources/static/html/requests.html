@@ -1,0 +1,269 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div ng-controller="RequestAddController">
+        <script type="text/ng-template" id="myRequestContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title"><p align='center'><b>Add New Request</b></p></h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-7">
+
+                        <form class="form-signin" name="requestForm" ng-submit="requestForm.$valid" novalidate>
+
+                            <div class="form-group">
+                                <input ng-model="requestPackage[4]" type="text" class="form-control" placeholder="Game Name:" required></input>
+                            </div>
+                            <label>Release Year:</label>
+                            <select class="form-control" ng-options="year.name for year in gameYear track by year.id" ng-model="requestPackage[1]"></select>
+                            <br>
+                            <div class="form-group">
+                                <textarea ng-model="requestPackage[5]" class="form-control" rows="5" id="description" placeholder="Game Description:"></textarea>
+                            </div>
+                            <br>
+                            <label>Game Developers:</label>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <select class="form-control" ng-options="dev.gdname for dev in gameDevelopers track by dev.gdid" ng-model="requestPackage[7]"></select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button ng-disabled="requestPackage[8].indexOf(requestPackage[7].gdname)>-1" class="btn btn-success" ng-click="add()">+</button>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button ng-disabled="requestPackage[8].indexOf(requestPackage[7].gdname)==-1" class="btn btn-danger" ng-click="removeDev()">-</button>
+                                </div>
+                            </div>
+                            <div ng-show="requestPackage[8].length">{{ requestPackage[8] }}</div>
+                            <br>
+                            <div class="form-group">
+                                <textarea ng-model="requestPackage[6]" class="form-control" rows="5" id="detectionRule" placeholder="Game Detection Rule:
+               <game> <-Necessary tag
+               <rule> <-One or More
+               <proc>ProcessName</proc> <-Exactly One
+               <file>NecessaryFileName</file> <-One or More
+               <no>MissingFileName</no> <-Zero or More
+               <arg>ProcCmdLineArgument</arg> <-Zero or More
+               <absent>MissingProcCmdLineArg</absent> <-Zero or More
+               </rule>
+               </game> <-Necessary tag"></textarea>
+                            </div>
+                            <br>
+                            <h5>Game Image:</h5>
+                            <div class="row">
+                                <div class="col-sm-4 form-group">
+                                    <img id="requestGameImg" ng-src="{{requestPackage[3]}}" height="150" width="100" />
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <input type="file" id="fileRequest" accept="image/*" name="file" style="display: none;" fileread="requestPackage[3]" />
+                                    <div class="form-group">
+                                        <input type="button" class="btn btn-default btn-primary" id="brGButton" value="Browse" onclick="document.getElementById('fileRequest').click();" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="button" class="btn btn-default btn-danger" id="resGButton" value="Reset" ng-click="removeImg()" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <fieldset>
+                                <div id="RequestAddResult">{{result}}</div>
+                            </fieldset>
+                            <br />
+
+                        </form>
+
+                    </div>
+                    <div class="col-sm-4"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="ok()">Add</button>
+                <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+        <button class="btn btn-default btn-success" ng-show="isGameUser()" ng-click="open()">Add Request</button>
+    </div>
+    <div class="col-sm-8">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-4">Order by (on page):</label>
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <select class="form-control" ng-options="filter.label for filter in reqCtrl.filters track by filter.id" ng-model="reqCtrl.flt_selected">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Ascending" ng-click="reqCtrl.asc()">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Descending" ng-click="reqCtrl.desc()">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Reset" ng-click="reqCtrl.reset()">
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search (by selected above):" ng-model="reqCtrl.filter">
+                <div class="input-group-btn">
+                    <input type="button" class="btn btn-default btn-primary" value="Search" ng-click="reqCtrl.select()">
+                </div>
+            </div>
+        </form>
+        <br/>
+        <table class="table table-hover">
+            <thead>
+                <tr ng-show="reqCtrl.display.length>1" align="center">
+                    <td colspan="6">
+                        <div class="pagination-centered" ng-show="reqCtrl.requests.length!=0">
+                            <ul class="pagination justify-content-end">
+                                <li ng-class="{disabled: reqCtrl.currentPage == 0}">
+                                    <a href ng-click="reqCtrl.prevPage()">« Prev</a>
+                                </li>
+                                <li ng-repeat="n in reqCtrl.range(reqCtrl.display.length, reqCtrl.currentPage, reqCtrl.currentPage + reqCtrl.gap) " ng-class="{active: n == reqCtrl.currentPage}" ng-click="reqCtrl.setPage(n)" ng-show="n>-1">
+                                    <a href ng-bind="n+1">1</a>
+                                </li>
+                                <li ng-class="{disabled: (reqCtrl.currentPage) == reqCtrl.display.length - 1}">
+                                    <a href ng-click="reqCtrl.nextPage()">Next »</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Game Name</th>
+                    <th>Release Year</th>
+                    <th>Submitted By</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tfoot ng-show="reqCtrl.display.length>1" align="center">
+                <td colspan="6">
+                    <div class="pagination-centered" ng-show="reqCtrl.requests.length!=0">
+                        <ul class="pagination justify-content-end">
+                            <li ng-class="{disabled: reqCtrl.currentPage == 0}">
+                                <a href ng-click="reqCtrl.prevPage()">« Prev</a>
+                            </li>
+                            <li ng-repeat="n in reqCtrl.range(reqCtrl.display.length, reqCtrl.currentPage, reqCtrl.currentPage + reqCtrl.gap) " ng-class="{active: n == reqCtrl.currentPage}" ng-click="reqCtrl.setPage(n)" ng-show="n>-1">
+                                <a href ng-bind="n+1">1</a>
+                            </li>
+                            <li ng-class="{disabled: (reqCtrl.currentPage) == reqCtrl.display.length - 1}">
+                                <a href ng-click="reqCtrl.nextPage()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tfoot>
+            <tbody>
+                <tr ng-repeat="request in reqCtrl.display[reqCtrl.currentPage] | orderBy:reqCtrl.flt_selected.name:reqCtrl.flt_reverse">
+                    <td>{{request.reqgname}}</td>
+                    <td>{{request.reqgrd}}</td>
+                    <td>{{request.gameUser.uname}}</td>
+                    <td>{{request.reqstatus}}</td>
+                    <td>
+                        <a class="btn btn-primary" ui-sref="requests({reqId: {{request.reqid}} })" ng-click="selectRequest(request.reqid); setTab(19)">View</a>
+                    </td>
+                    <td>
+                        <div ng-controller="RequestUpdateController">
+                            <script type="text/ng-template" id="updateRequestContent.html">
+                                <div class="modal-header">
+                                    <h3 class="modal-title"><p align='center'><b>Update Request</b></p></h3>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-sm-3"></div>
+                                        <div class="col-sm-7">
+
+                                            <form class="form-signin" name="requestForm" ng-submit="requestForm.$valid" novalidate>
+
+                                                <div class="form-group">
+                                                    <input ng-model="requestPackage[4]" type="text" class="form-control" placeholder="Game Name:" required></input>
+                                                </div>
+                                                <label>Release Year:</label>
+                                                <select class="form-control" ng-options="year.name for year in gameYear track by year.id" ng-model="requestPackage[1]"></select>
+                                                <br>
+                                                <div class="form-group">
+                                                    <textarea ng-model="requestPackage[5]" class="form-control" rows="5" id="description" placeholder="Game Description:"></textarea>
+                                                </div>
+                                                <br>
+                                                <label>Game Developers:</label>
+                                                <div class="row">
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control" ng-options="dev.gdname for dev in gameDevelopers track by dev.gdid" ng-model="requestPackage[7]"></select>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button ng-disabled="requestPackage[8].indexOf(requestPackage[7].gdname)>-1" class="btn btn-success" ng-click="add()">+</button>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button ng-disabled="requestPackage[8].indexOf(requestPackage[7].gdname)==-1" class="btn btn-danger" ng-click="removeDev()">-</button>
+                                                    </div>
+                                                </div>
+
+                                                <div ng-show="requestPackage[8].length">{{ requestPackage[8] }}</div>
+                                                <br>
+                                                <div class="form-group">
+                                                    <textarea ng-model="requestPackage[6]" class="form-control" rows="5" id="detectionRule" placeholder="Game Detection Rule:
+                              <game> <-Necessary tag
+                              <rule> <-One or More
+                              <proc>ProcessName</proc> <-Exactly One
+                              <file>NecessaryFileName</file> <-One or More
+                              <no>MissingFileName</no> <-Zero or More
+                              <arg>ProcCmdLineArgument</arg> <-Zero or More
+                              <absent>MissingProcCmdLineArg</absent> <-Zero or More
+                              </rule>
+                              </game> <-Necessary tag"></textarea>
+                                                </div>
+                                                <br>
+                                                <h5>Game Image:</h5>
+                                                <div class="row">
+                                                    <div class="col-sm-4 form-group">
+                                                        <img id="requestUpdateGameImg" ng-src="{{requestPackage[3]}}" height="150" width="100" />
+                                                    </div>
+                                                    <div class="col-sm-4 form-group">
+                                                        <input type="file" id="fileUpdateRequest" accept="image/*" name="file" style="display: none;" fileread="requestPackage[3]" />
+                                                        <div class="form-group">
+                                                            <input type="button" class="btn btn-default btn-primary" id="brGButton" value="Browse" onclick="document.getElementById('fileUpdateRequest').click();" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input type="button" class="btn btn-default btn-danger" id="resGButton" value="Reset" ng-click="removeImg()" />
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <label ng-show="isAdmin()">Status:</label>
+                                                <select ng-show="isAdmin()" class="form-control" ng-options="status.name for status in requestPackage[11] track by status.id" ng-model="requestPackage[12]"></select>
+                                                <fieldset>
+                                                    <div id="RequestUpdateResult">{{result}}</div>
+                                                </fieldset>
+                                                <br />
+
+                                            </form>
+
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-info" ng-click="ok()">Update</button>
+                                    <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+                                </div>
+                            </script>
+                            <button class="btn btn-default btn-info" ng-show="(isAdmin() || isAuthor(request.gameUser.uname)) && reqCtrl.isNotAccepted(request.reqstatus)" ng-click="open(request.reqid)">Update</button>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-default btn-danger" ng-show="isAdmin() || (isAuthor(request.gameUser.uname) && reqCtrl.isPending(request.reqstatus))" ng-really-click="reqCtrl.removeRequest(request.reqid)" ng-really-message="Are you sure you want to delete the request for {{request.reqgname}} ({{request.reqgrd}})?">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div ng-show="reqCtrl.requests.length==0">There are no requests available to show</div>
+    </div>
+</body>
+
+</html>

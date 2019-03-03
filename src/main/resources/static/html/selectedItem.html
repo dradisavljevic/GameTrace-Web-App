@@ -1,0 +1,62 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-xs-12 col-md-4 col-lg-3">
+            <div class="userProfileInfo">
+                <div class="image text-center">
+                    <img ng-src="{{selectedItem.itemim}}" height="200" width="200">
+                </div>
+                <div class="box">
+                    <div class="name">
+                        <p align="center"><strong>{{selectedItem.itemname}} (x{{selectedItem.itemq}})</strong></p>
+                    </div>
+                    <div class="info">
+                        <span><b>Price:</b> {{selectedItem.itemprice}} {{selectedItem.itemcurr}}</span>
+                        <span><b>Video Game:</b> <a ui-sref="games({gamesId: selectedItem.gameGameid })" ng-click="selectGame(selectedItem.game.gameid); setTab(9)"> {{selectedItem.game.gamename}} ({{selectedItem.game.gamery}}) </a></span>
+                        <span><b>Seller:</b> <a ui-sref="users({username: selectedItem.gameUserUname })" ng-click="selectUser(selectedItem.gameUserUname); setTab(10)"> {{selectedItem.gameUserUname}} </a></span>
+                    </div>
+                </div>
+            </div>
+            <div align="center" ng-controller="SpecificItemUpdateController">
+                <button class="btn btn-default btn-info" ng-show="isAuthor(selectedItem.gameUserUname) && isInStock(selectedItem.itemstat)" ng-click="open(selectedItem.itemid, selectedItem.gameUserUname)">Update Item</button>
+                <button class="btn btn-default btn-primary" ng-hide="isAuthor(selectedItem.gameUserUname) || isNotInStock(selectedItem.itemstat)" ng-really-click="buyItem(selectedItem.itemid, selectedItem.gameUserUname)" ng-really-message="Are you sure you want to buy this item?">Buy</button>
+                <button class="btn btn-default btn-warning" ng-show="isAuthor(selectedItem.gameUserUname) && isSold(selectedItem.itemstat)" ng-really-click="finalizeDeal(selectedItem.itemid, selectedItem.gameUserUname)" ng-really-message="Are you sure you want to finalize this deal?">Finalize</button>
+                <button class="btn btn-default btn-danger" ng-show="isSold(selectedItem.itemstat)" ng-really-click="cancelDeal(selectedItem.itemid, selectedItem.gameUserUname)" ng-really-message="Are you sure you want to cancel this deal?">Cancel</button>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-8 col-lg-9">
+            <div class="box">
+                <div class="col-sm-9">
+                    <div class="tab-content">
+                        <!-- About -->
+                        <div class="userProfileContent">
+                            <div class="i">
+                                <h2 class="boxHeadline"><b>Items from the same game:</b></h2>
+                                <div class="container" background-color="white" vertical-align="middle">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <ul class="horizontal-slide">
+                                                <li class="col-md-2" ng-repeat="item in itemsGame">
+                                                    <a ui-sref="items({itemId: {{item.itemid}}, itemSell: item.gameUserUname })" ng-click="selectItem(item.itemid, item.gameUserUname); setTab(18)"><img height="100" width="100" title="{{item.itemname}}" ng-src="{{item.itemim}}" /></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div ng-show="itemsGame.length==0">There are no other items from this game on the market currently.</div>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

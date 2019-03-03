@@ -1,0 +1,52 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div class="col-sm-8">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Group Name</th>
+                    <th>Group Master</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tfoot ng-show="giCtrl.display.length>1">
+                <td colspan="6">
+                    <div class="pagination pull-right" ng-show="giCtrl.invites.length!=0">
+                        <ul class="pagination justify-content-end">
+                            <li ng-class="{disabled: giCtrl.currentPage == 0}">
+                                <a href ng-click="giCtrl.prevPage()">« Prev</a>
+                            </li>
+                            <li ng-repeat="n in giCtrl.range(giCtrl.display.length, giCtrl.currentPage, giCtrl.currentPage + giCtrl.gap) " ng-class="{active: n == giCtrl.currentPage}" ng-click="giCtrl.setPage(n)" ng-show="n>-1">
+                                <a href ng-bind="n+1">1</a>
+                            </li>
+                            <li ng-class="{disabled: (giCtrl.currentPage) == giCtrl.display.length - 1}">
+                                <a href ng-click="giCtrl.nextPage()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tfoot>
+            <tbody>
+                <tr ng-repeat="invite in giCtrl.display[giCtrl.currentPage]">
+                    <td><a ui-sref="groups({groupId: {{invite.gameGroup.grid}}, groupGM: invite.gameGroup.grgm })" ng-click="selectGroup(invite.gameGroup.grid, invite.gameGroup.grgm); setTab(17)">{{invite.gameGroup.grname}}</a></td>
+                    <td><a ui-sref="users({username: invite.gameGroup.grgm })" ng-click="selectUser(invite.gameGroup.grgm); setTab(10)">{{invite.gameGroup.grgm}}</a></td>
+                    <td>{{invite.gidate}}</td>
+                    <td>
+                        <button class="btn btn-success" ng-click="giCtrl.accept(invite.giid)">Accept</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-default btn-danger" ng-click="giCtrl.decline(invite.giid)">Decline</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div ng-show="giCtrl.invites.length==0">There are no new invites </div>
+    </div>
+</body>
+
+</html>

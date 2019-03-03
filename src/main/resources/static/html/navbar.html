@@ -1,0 +1,39 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" ui-sref="root({rootPath: 1 })" ng-click="setTab(1)">Home</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li ng-class="{active:isSet(0)}"><a ui-sref="root({rootPath: 0 })" class="btn" ng-click="setTab(0)">Games</a></li>
+                <li ng-class="{active:isSet(14)}"><a ui-sref="root({rootPath: 14 })" class="btn" ng-click="setTab(14)">Developers</a></li>
+                <li ng-class="{active:isSet(7)}"><a ui-sref="root({rootPath: 7 })" class="btn" ng-click="setTab(7)">Requests</a></li>
+                <li ng-class="{active:isSet(8)}"><a ui-sref="root({rootPath: 8 })" class="btn" ng-click="setTab(8)">Users</a></li>
+                <li ng-class="{active:isSet(2)}"><a ui-sref="root({rootPath: 2 })" class="btn" ng-click="setTab(2)">Groups</a></li>
+                <li ng-class="{active:isSet(12)}"><a ui-sref="root({rootPath: 12 })" class="btn" ng-click="setTab(12)">Guides</a></li>
+                <li ng-class="{active:isSet(3)}"><a ui-sref="root({rootPath: 3 })" class="btn" ng-click="setTab(3)">Market</a></li>
+                <li ng-class="{active:isSet(11)}"><a ui-sref="root({rootPath: 11 })" class="btn" ng-click="setTab(11)">Streamers</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-class="{active:isSet(21)}" ng-show="isGameUser()"><a ui-sref="root({rootPath: 21 })" class="btn" ng-click="setTab(21)"><span class="glyphicon glyphicon-question-sign"></span> Support</a></li>
+                <li ng-class="{active:isSet(23)}" ng-show="isAdmin()"><a ui-sref="root({rootPath: 23 })" class="btn" ng-click="setTab(23)"><span class="glyphicon glyphicon-ok-sign"></span> All Tickets</a></li>
+                <li ng-class="{active:isSet(24)}" ng-show="isAdmin()"><a ui-sref="root({rootPath: 24 })" class="btn" ng-click="setTab(24)"><span class="glyphicon glyphicon-question-sign"></span> New Tickets</a></li>
+                <li ng-class="{active:isSet(27)}" ng-show="isAdmin()"><a ui-sref="root({rootPath: 27 })" class="btn" ng-click="setTab(27)"><span class="glyphicon glyphicon-euro"></span> Finalized Transactions</a></li>
+                <li ng-class="{active:isSet(28)}" ng-show="isGameUser()"><a ui-sref="root({rootPath: 28 })" class="btn" ng-click="setTab(28)"><span class="glyphicon glyphicon-earphone"></span> Chat</a></li>
+                <li ng-class="{active:isSet(4)}" ng-show="isGameUser()"><a ui-sref="root({rootPath: 4 })" class="btn" ng-click="setTab(4)"><span class="glyphicon glyphicon-envelope"></span> Invites</a></li>
+                <li ng-class="{active:isSet(5)}" ng-show="isGameUser()"><a ui-sref="root({rootPath: 5 })" class="btn" ng-click="setTab(5)"><span class="glyphicon glyphicon-bell"></span> Friend Requests</a></li>
+                <li ng-class="{active:isSet(15)}" ng-show="isGameUser()"><a ui-sref="root({rootPath: 15 })" class="btn" ng-click="setTab(15)"><span class="glyphicon glyphicon-book"></span> My Library</a></li>
+                <li ng-class="{active:isSet(6)}" ng-show="isGameUser()"><a ui-sref="root({rootPath: 6 })" class="btn" ng-click="setTab(6)"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+                <li><a class="btn" ng-click="indexCtrl.logout()"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+</body>
+
+</html>

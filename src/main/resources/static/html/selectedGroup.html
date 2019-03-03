@@ -1,0 +1,38 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div class="container" align-content="flex-start">
+        <h1 class="my-4" align="center">{{selectedGroup.grname}} Members</h1>
+        <hr>
+        <div class="row" align-content="flex-start">
+            <h3 class="my-4" align="center" ng-show="displayGroupMembers.length==0">This group has no members.</h3>
+            <div class="col-lg-2 col-md-3 col-sm-4 portfolio-item" ng-repeat="member in displayGroupMembers[currentPageGroupMembers] ">
+                <div class="card h-100">
+                    <img align="middle" class="card-img-top" ng-src="{{member.gtUser.uavat}}" height="150" width="150" />
+                    <div class="card-body">
+                        <h5 align="center" class="card-title"><a ui-sref="users({username: member.uname })" ng-click="selectUser(member.uname); setTab(10)">{{member.uname}}</a></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center" ng-show="displayGroupMembers.length>1">
+        <ul class="pagination justify-content-center">
+            <li ng-class="{disabled: currentPageGroupMembers == 0}">
+                <a href ng-click="prevPageGroupMembers()">« Prev</a>
+            </li>
+            <li ng-repeat="n in range(displayGroupMembers.length, currentPageGroupMembers, currentPageGroupMembers + gap) " ng-class="{active: n == currentPageGroupMembers}" ng-click="setPageGroupMembers(n)" ng-show="n>-1">
+                <a href ng-bind="n+1">1</a>
+            </li>
+            <li ng-class="{disabled: (currentPageGroupMembers) == displayGroupMembers.length - 1}">
+                <a href ng-click="nextPageGroupMembers()">Next »</a>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

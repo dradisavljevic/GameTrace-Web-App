@@ -1,0 +1,106 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div class="col-sm-8">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-4">Order by (on page):</label>
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <select class="form-control" ng-options="filter.label for filter in isCtrl.filters track by filter.id" ng-model="isCtrl.flt_selected">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Ascending" ng-click="isCtrl.asc()">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Descending" ng-click="isCtrl.desc()">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Reset" ng-click="isCtrl.reset()">
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search (by selected above):" ng-model="isCtrl.filter">
+                <div class="input-group-btn">
+                    <input type="button" class="btn btn-default btn-primary" value="Search" ng-click="isCtrl.select()">
+                </div>
+            </div>
+        </form>
+        <br/>
+        <table class="table table-hover">
+            <thead>
+                <tr ng-show="isCtrl.display.length>1" align="center">
+                    <td colspan="6">
+                        <div class="pagination-centered" ng-show="isCtrl.items.length!=0">
+                            <ul class="pagination justify-content-end">
+                                <li ng-class="{disabled: isCtrl.currentPage == 0}">
+                                    <a href ng-click="isCtrl.prevPage()">« Prev</a>
+                                </li>
+                                <li ng-repeat="n in isCtrl.range(isCtrl.display.length, isCtrl.currentPage, isCtrl.currentPage + isCtrl.gap) " ng-class="{active: n == isCtrl.currentPage}" ng-click="isCtrl.setPage(n)" ng-show="n>-1">
+                                    <a href ng-bind="n+1">1</a>
+                                </li>
+                                <li ng-class="{disabled: (isCtrl.currentPage) == isCtrl.display.length - 1}">
+                                    <a href ng-click="isCtrl.nextPage()">Next »</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Image</th>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Video Game</th>
+                    <th>Item Price</th>
+                    <th>Currency</th>
+                    <th>Buyer</th>
+                </tr>
+            </thead>
+            <tfoot ng-show="isCtrl.display.length>1" align="center">
+                <td colspan="6">
+                    <div class="pagination-centered" ng-show="isCtrl.items.length!=0">
+                        <ul class="pagination justify-content-end">
+                            <li ng-class="{disabled: isCtrl.currentPage == 0}">
+                                <a href ng-click="isCtrl.prevPage()">« Prev</a>
+                            </li>
+                            <li ng-repeat="n in isCtrl.range(isCtrl.display.length, isCtrl.currentPage, isCtrl.currentPage + isCtrl.gap) " ng-class="{active: n == isCtrl.currentPage}" ng-click="isCtrl.setPage(n)" ng-show="n>-1">
+                                <a href ng-bind="n+1">1</a>
+                            </li>
+                            <li ng-class="{disabled: (isCtrl.currentPage) == isCtrl.display.length - 1}">
+                                <a href ng-click="isCtrl.nextPage()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tfoot>
+            <tbody>
+                <tr ng-repeat="item in isCtrl.display[isCtrl.currentPage] | orderBy:isCtrl.flt_selected.name:isCtrl.flt_reverse">
+                    <td><img ng-src="{{item.itemim}}" height="150" width="150" /></td>
+                    <td>{{item.itemname}}</td>
+                    <td>{{item.itemq}}</td>
+                    <td>{{item.game.gamename}} ({{item.game.gamery}})</td>
+                    <td>{{item.itemprice}}</td>
+                    <td>{{item.itemcurr}}</td>
+                    <td>{{item.itembuy}}</td>
+                    <td>
+                        <a class="btn btn-primary" ui-sref="items({itemId: {{item.itemid}}, itemSell: item.gameUserUname })" ng-click="selectItem(item.itemid, item.gameUserUname); setTab(18)">
+                        View
+                        </a>
+                    </td>
+                    <td>
+                        <button class="btn btn-default btn-danger" ng-really-click="isCtrl.cancelDeal(item.itemid, item.gameUserUname)" ng-really-message="Are you sure you want to cancel this deal?">Cancel</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div ng-show="isCtrl.items.length==0">You have no ongoing sell deals at the time.</div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <h1 align="center"><b>{{selectedTicket.tickt}} ({{selectedTicket.tickstat}})</b></h1>
+    <h4 align="center">{{selectedTicket.tickdesc}}</h4>
+    <div ng-controller="AnswerAddController">
+        <script type="text/ng-template" id="answerTicketContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title"><p align='center'><b>Answer Ticket</b></p></h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6">
+
+                        <form class="form-signin" name="answerForm" ng-submit="answerForm.$valid" novalidate>
+
+                            <div class="form-group">
+                                <textarea ng-model="answerPackage[0]" class="form-control" rows="9" id="answer" placeholder="Ticket answer:"></textarea>
+                            </div>
+                            <br>
+                            <fieldset>
+                                <div id="AnswerAddResult">{{result}}</div>
+                            </fieldset>
+                            <br />
+                        </form>
+
+                    </div>
+                    <div class="col-sm-4"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="ok()">Answer</button>
+                <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+        <button ng-show="isNotAnswered(selectedTicket.tickstat) && isAdmin()" class="btn btn-default btn-primary center-block" ng-click="open(selectedTicket.tickid)">Answer Ticket</button>
+    </div>
+    <br>
+    <br>
+    <div ng-controller="AnswerUpdateController">
+        <h1 align="center" ng-hide="isNotAnswered(selectedTicket.tickstat)"><b>Answer:</b></h1>
+        <h4 align="center" ng-hide="isNotAnswered(selectedTicket.tickstat)">{{selectedAnswer.tanscont}}</h4>
+        <script type="text/ng-template" id="updateAnswerContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title"><p align='center'><b>Update Answer</b></p></h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6">
+
+                        <form class="form-signin" name="answerForm" ng-submit="answerForm.$valid" novalidate>
+
+                            <div class="form-group">
+                                <textarea ng-model="answerPackage[0]" class="form-control" rows="9" id="answer" placeholder="Ticket answer:"></textarea>
+                            </div>
+                            <br>
+                            <fieldset>
+                                <div id="AnswerUpdateResult">{{result}}</div>
+                            </fieldset>
+                            <br />
+                        </form>
+
+                    </div>
+                    <div class="col-sm-4"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" ng-click="ok()">Update</button>
+                <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+        <button ng-hide="isNotAnswered(selectedTicket.tickstat) || isGameUser()" class="btn btn-default btn-info center-block" ng-click="open(selectedAnswer.tansid)">Edit Answer</button>
+    </div>
+</body>
+
+</html>

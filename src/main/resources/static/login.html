@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html ng-app="login" ng-controller="AuthorizationController as authCtrl">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>GameTrace Login</title>
+		
+		<script src="js/angular.js"></script>
+		<script src="js/angular-resource.js"></script>
+		<script src="js/angular-route.js"></script>
+		<script src="js/controllers/login.js" type="text/javascript"></script>
+		
+		<link rel="stylesheet" href="css/login.css"></link>
+		<link rel="stylesheet" href="css/bootstrap.css">
+	</head>
+	<body>
+		<div class="row">
+	  		<div class="col-sm-5"></div>
+	  		<div class="col-sm-2">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<form name="loginForm" ng-controller="LoginController as loginCtrl" ng-submit='loginForm.$valid && loginCtrl.login()' class="form-signin" novalidate >
+							<h3 align="center">Welcome to GameTrace</h3>
+							<fieldset class="form-group">
+								<input ng-model="loginCtrl.user.uname"  type="text" class="form-control" placeholder="Username:" required></input>
+							</fieldset>
+							<fieldset class="form-group">
+								<input ng-model="loginCtrl.user.pword" type="password" class="form-control" placeholder="Password:" required></input>
+							</fieldset>
+							<fieldset class="form-group">
+                				<input  type="submit" class="btn btn-lg btn-primary btn-block pull-right" value="Login" />
+              				</fieldset>
+							<hr></hr>
+							<a href="register.html" class="btn btn-lg btn-info btn-block" role="button">Register</a>
+							<br/>
+							<fieldset><div align="center" id="LoginResult">{{loginCtrl.result}}</div></fieldset>
+						</form>
+					</div>
+				</div>
+	  		</div>
+	  		<div class="col-sm-5"></div>
+	  	</div>
+	</body>
+</html>

@@ -1,0 +1,187 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div ng-controller="StreamerAddController">
+        <script type="text/ng-template" id="myStreamerContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title"><p align='center'><b>Add New Streamer</b></p></h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6">
+
+                        <form class="form-signin" name="streamerForm" ng-submit="streamerForm.$valid" novalidate>
+
+                            <div class="form-group">
+                                <input ng-model="streamerPackage[0]" type="text" class="form-control" placeholder="Streamer Name:" required></input>
+                            </div>
+                            <div class="form-group">
+                                <input ng-model="streamerPackage[1]" type="text" class="form-control" placeholder="Stream url:" required></input>
+                            </div>
+                            <label>Streamed Games:</label>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <select class="form-control" ng-options="game.gamename for game in streamerPackage[3] track by game.gameid" ng-model="streamerPackage[2]"></select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button ng-disabled="streamerPackage[4].indexOf(streamerPackage[2].gameid)>-1" class="btn btn-success" ng-click="add()">+</button>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button ng-disabled="streamerPackage[4].indexOf(streamerPackage[2].gameid)==-1" class="btn btn-danger" ng-click="removeGame()">-</button>
+                                </div>
+                            </div>
+                            <div ng-show="streamerPackage[5].length">{{ streamerPackage[5] }}</div>
+                            <hr>
+                            <br>
+                            <fieldset>
+                                <div id="StreamerAddResult">{{result}}</div>
+                            </fieldset>
+                            <br />
+                        </form>
+
+                    </div>
+                    <div class="col-sm-4"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="ok()">Add</button>
+                <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+        <button class="btn btn-default btn-success" ng-show="isAdmin()" ng-click="open()">Add Streamer</button>
+    </div>
+    <div class="col-sm-8">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-4">Order by Streamer Name (on page):</label>
+                <div class="col-sm-2">
+                    <input type="button" class="btn btn-default btn-primary" value="Ascending" ng-click="strmCtrl.asc()">
+                </div>
+                <div class="col-sm-2">
+                    <input type="button" class="btn btn-default btn-primary" value="Descending" ng-click="strmCtrl.desc()">
+                </div>
+                <div class="col-sm-2">
+                    <input type="button" class="btn btn-default btn-primary" value="Reset" ng-click="strmCtrl.reset()">
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search by Username" ng-model="strmCtrl.filter">
+                <div class="input-group-btn">
+                    <input type="button" class="btn btn-default btn-primary" value="Search" ng-click="strmCtrl.select()">
+                </div>
+            </div>
+        </form>
+        <br/>
+        <table class="table table-hover">
+            <thead>
+                <tr ng-show="strmCtrl.display.length>1" align="center">
+                    <td colspan="6">
+                        <div class="pagination-centered" ng-show="strmCtrl.streamers.length!=0">
+                            <ul class="pagination justify-content-end">
+                                <li ng-class="{disabled: strmCtrl.currentPage == 0}">
+                                    <a href ng-click="strmCtrl.prevPage()">« Prev</a>
+                                </li>
+                                <li ng-repeat="n in strmCtrl.range(strmCtrl.display.length, strmCtrl.currentPage, strmCtrl.currentPage + strmCtrl.gap) " ng-class="{active: n == strmCtrl.currentPage}" ng-click="strmCtrl.setPage(n)" ng-show="n>-1">
+                                    <a href ng-bind="n+1">1</a>
+                                </li>
+                                <li ng-class="{disabled: (strmCtrl.currentPage) == strmCtrl.display.length - 1}">
+                                    <a href ng-click="strmCtrl.nextPage()">Next »</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <th>URL</th>
+                </tr>
+            </thead>
+            <tfoot ng-show="strmCtrl.display.length>1" align="center">
+                <td colspan="6">
+                    <div class="pagination-centered" ng-show="strmCtrl.streamers.length!=0">
+                        <ul class="pagination justify-content-end">
+                            <li ng-class="{disabled: strmCtrl.currentPage == 0}">
+                                <a href ng-click="strmCtrl.prevPage()">« Prev</a>
+                            </li>
+                            <li ng-repeat="n in strmCtrl.range(strmCtrl.display.length, strmCtrl.currentPage, strmCtrl.currentPage + strmCtrl.gap) " ng-class="{active: n == strmCtrl.currentPage}" ng-click="strmCtrl.setPage(n)" ng-show="n>-1">
+                                <a href ng-bind="n+1">1</a>
+                            </li>
+                            <li ng-class="{disabled: (strmCtrl.currentPage) == strmCtrl.display.length - 1}">
+                                <a href ng-click="strmCtrl.nextPage()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tfoot>
+            <tbody>
+                <tr ng-repeat="streamer in strmCtrl.display[strmCtrl.currentPage] | orderBy:strmCtrl.flt_selected.name:strmCtrl.flt_reverse">
+                    <td>{{streamer.strname}}</td>
+                    <td><a ng-href='{{streamer.strurl}}'>{{streamer.strurl}}</a></td>
+                    <td>
+                        <div ng-controller="StreamerUpdateController">
+                            <script type="text/ng-template" id="updateStreamerContent.html">
+                                <div class="modal-header">
+                                    <h3 class="modal-title"><p align='center'><b>Update Streamer</b></p></h3>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-sm-3"></div>
+                                        <div class="col-sm-6">
+
+                                            <form class="form-signin" name="streamerForm" ng-submit="streamerForm.$valid" novalidate>
+
+                                                <div class="form-group">
+                                                    <input ng-model="streamerPackage[0]" type="text" class="form-control" placeholder="Streamer Name:" required></input>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input ng-model="streamerPackage[1]" type="text" class="form-control" placeholder="Stream url:" required></input>
+                                                </div>
+                                                <label>Streamed Games:</label>
+                                                <div class="row">
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control" ng-options="game.gamename for game in streamerPackage[3] track by game.gameid" ng-model="streamerPackage[2]"></select>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button ng-disabled="streamerPackage[4].indexOf(streamerPackage[2].gameid)>-1" class="btn btn-success" ng-click="add()">+</button>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button ng-disabled="streamerPackage[4].indexOf(streamerPackage[2].gameid)==-1" class="btn btn-danger" ng-click="removeGame()">-</button>
+                                                    </div>
+                                                </div>
+                                                <div ng-show="streamerPackage[5].length">{{ streamerPackage[5] }}</div>
+                                                <hr>
+                                                <br>
+                                                <fieldset>
+                                                    <div id="StreamerUpdateResult">{{result}}</div>
+                                                </fieldset>
+                                                <br />
+                                            </form>
+
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-info" ng-click="ok()">Update</button>
+                                    <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+                                </div>
+                            </script>
+                            <button class="btn btn-default btn-info" ng-show="isAdmin()" ng-click="open(streamer.strid)">Update</button>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-default btn-danger" ng-show="isAdmin()" ng-really-click="strmCtrl.removeStreamer(streamer.strid)" ng-really-message="Are you sure you want to delete the streamer {{streamer.strname}}?">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div ng-show="strmCtrl.streamers.length==0">There are no streamers available to show </div>
+    </div>
+</body>
+
+</html>

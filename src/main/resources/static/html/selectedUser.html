@@ -1,0 +1,166 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+            <div class="row">
+               <div class="col-xs-12 col-md-4 col-lg-3">
+                  <div class="userProfileInfo">
+                     <div class="image text-center">
+                        <img ng-src="{{selectedUser.gtUser.uavat}}" height="210" width="140">
+                     </div>
+                     <div class="box">
+                        <div class="info">
+                           <span><b>Joined on:</b> {{selectedUser.gtUser.udate}}</span>
+                           <span><b>Date of Birth:</b> {{selectedUser.udob}}</span>
+                           <span><b>Real Name:</b> {{selectedUser.rname}}</span>
+                           <span><b>Country:</b> {{selectedUser.ucountry}}</span>
+                        </div>
+                     </div>
+                  </div>
+                  <div align="center" >
+                     <div ng-controller="SendRequestController as srCtrl">
+                        <button class="btn btn-default btn-success" ng-disabled="requestSent" ng-show="isGameUser() && isFriend()" ng-click="srCtrl.sendRequest(selectedUser.uname)">Send Friend Request</button>
+                        <script type="text/ng-template" id="myGroupInviteContent.html">
+                           <div class="modal-header">
+                           			 <h3 class="modal-title"><p align='center'><b>Choose group to invite user in</b></p></h3>
+                           </div>
+                           <div class="modal-body">
+                           				<div class="row">
+                           <div class="col-sm-3"></div>
+                           <div class="col-sm-6">
+                           
+                           <form class="form-signin" name="groupInviteForm" ng-submit="groupInviteForm.$valid" novalidate>
+                           
+                           <select class="form-control"
+                           ng-options="group.grname for group in ginvitePackage[0] track by group.grid"
+                           ng-model="ginvitePackage[1]"></select>
+                           <fieldset ng-show="check"><div>User has not yet responded to previous invite to this group.</div></fieldset>
+                           <fieldset><div id="GroupInviteResult">{{result}}</div></fieldset><br />
+                           </form>
+                           
+                           </div>
+                           <div class="col-sm-4"></div>
+                           </div>
+                           </div>
+                           <div class="modal-footer">
+                           				<button class="btn btn-success" ng-disabled="check" ng-click="ok()">Send</button>
+                           				<button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+                           </div>
+                        </script>
+                        <button class="btn btn-default btn-primary" ng-disabled="inviteDisable" ng-hide="GMGroups.length==0" ng-click="open(selectedUser.uname)">Send Group Invite</button>
+                        <fieldset ng-show="inviteDisable && GMGroups.length!=0">
+                           <div><b>User is already a member of all your groups</b></div>
+                        </fieldset>
+                     </div>
+                  </div>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <h3 align="center">Latest Achievements:</h3>
+                  <hr>
+                  <div align="center">
+                     <table class="table table-hover">
+                        <thead>
+                           <tr>
+                              <th>Achievement Name</th>
+                              <th>Condition</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr ng-repeat="ach in achievements">
+                              <td>{{ach.achname}}</td>
+                              <td>{{ach.achcond}}</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="col-xs-12 col-md-8 col-lg-9">
+                  <div class="box">
+                     <div class="col-sm-9">
+                        <div class="tab-content">
+                           <!-- About -->
+                           <div class="userProfileContent">
+                              <div class="i">
+                                 <h2 class="boxHeadline"><b>{{selectedUser.uname}}</b></h2>
+                                 <p>{{selectedUser.ubio}}</p>
+                              </div>
+                              <hr>
+                              <div class="i">
+                                 <h2 class="boxHeadline"><b>Most Played Games</b></h2>
+                                 <ul class="simpleListings">
+                                    <table class="table table-hover">
+                                       <thead>
+                                          <tr>
+                                             <th>Image</th>
+                                             <th>Name</th>
+                                             <th>Time</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                          <tr ng-repeat="played in playedGames">
+                                             <td><img ng-src="{{played.gimage}}" height="100" width="66"/></td>
+                                             <td>{{played.gamename}} ({{played.gamery}})</td>
+                                             <td>{{played.time}}</td>
+                                             <td>
+                                                <a class="btn btn-primary" ui-sref="games({gamesId: {{played.gameid}} })" ng-click="selectGame(played.gameid); setTab(9)">View</a>
+                                             </td>
+                                          </tr>
+                                       </tbody>
+                                    </table>
+                                    <div ng-show="playedGames.length==0  || playedGames==null">There are no played games available to show</div>
+                                 </ul>
+                              </div>
+                              <hr>
+                              <div class="i">
+                                 <h2 class="boxHeadline"><b>Friends</b></h2>
+                                 <div class="container" style="background-color:white;">
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <ul class="horizontal-slide">
+                                             <li class="col-md-2" ng-repeat="friend in friends"><a ui-sref="users({username: friend.uname })" ng-click="selectUser(friend.uname); setTab(10)"><img height="100" width="100"  title="{{friend.uname}}" ng-src="{{friend.gtUser.uavat}}"/></a></li>
+                                          </ul>
+                                       </div>
+                                       <div ng-show="friends.length==0  || friends==null">There are no friends available to show</div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <!-- Activities -->
+                     </div>
+                     <div class="col-sm-3 sidenav">
+                        <h3>Groups</h3>
+                        <ul class="simpleListings">
+                           <li ng-repeat="group in displayGroups[currentPageGroups]"><a ui-sref="groups({groupId: {{group.grid}}, groupGM: group.grgm })" ng-click="selectGroup(group.grid, group.grgm); setTab(17)">{{group.grname}}</a> </li>
+                        </ul>
+                        <tfoot>
+                           <td colspan="6">
+                              <div class="pagination pull-right" ng-show="displayGroups.length>1">
+                                 <ul class="pagination justify-content-end">
+                                    <li ng-class="{disabled: currentPageGroups == 0}">
+                                       <a href ng-click="prevPageGroups()">« Prev</a>
+                                    </li>
+                                    <li ng-repeat="n in range(displayGroups.length, currentPageGroups, currentPageGroups + gap) "
+                                       ng-class="{active: n == currentPageGroups}"
+                                       ng-click="setPageGroups(n)" ng-show="n>-1">
+                                       <a href ng-bind="n+1">1</a>
+                                    </li>
+                                    <li ng-class="{disabled: (currentPageGroups) == displayGroups.length - 1}">
+                                       <a href ng-click="nextPageGroups()">Next »</a>
+                                    </li>
+                                 </ul>
+                              </div>
+                           </td>
+                        </tfoot>
+                        <div ng-show="groups.length==0  || groups==null">There are no groups available to show</div>
+                        <hr>
+                     </div>
+                  </div>
+               </div>
+            </div>
+</body>
+</html>

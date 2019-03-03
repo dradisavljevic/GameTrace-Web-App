@@ -1,0 +1,91 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div class="col-sm-8">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-4">Order by (on page):</label>
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <select class="form-control" ng-options="filter.label for filter in ntCtrl.filters track by filter.id" ng-model="ntCtrl.flt_selected">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Ascending" ng-click="ntCtrl.asc()">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Descending" ng-click="ntCtrl.desc()">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Reset" ng-click="ntCtrl.reset()">
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search (by selected above):" ng-model="ntCtrl.filter">
+                <div class="input-group-btn">
+                    <input type="button" class="btn btn-default btn-primary" value="Search" ng-click="ntCtrl.select()">
+                </div>
+            </div>
+        </form>
+        <br/>
+        <table class="table table-hover" ng-show="ntCtrl.tickets.length!=0">
+            <thead>
+                <tr ng-show="ntCtrl.display.length>1" align="center">
+                    <td colspan="6">
+                        <div class="pagination-centered" ng-show="ntCtrl.tickets.length!=0">
+                            <ul class="pagination justify-content-end">
+                                <li ng-class="{disabled: ntCtrl.currentPage == 0}">
+                                    <a href ng-click="ntCtrl.prevPage()">« Prev</a>
+                                </li>
+                                <li ng-repeat="n in ntCtrl.range(ntCtrl.display.length, ntCtrl.currentPage, ntCtrl.currentPage + ntCtrl.gap) " ng-class="{active: n == ntCtrl.currentPage}" ng-click="ntCtrl.setPage(n)" ng-show="n>-1">
+                                    <a href ng-bind="n+1">1</a>
+                                </li>
+                                <li ng-class="{disabled: (ntCtrl.currentPage) == ntCtrl.display.length - 1}">
+                                    <a href ng-click="ntCtrl.nextPage()">Next »</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Ticket Title</th>
+                    <th>Submited By </th>
+                </tr>
+            </thead>
+            <tfoot ng-show="ntCtrl.display.length>1" align="center">
+                <td colspan="6">
+                    <div class="pagination-centered" ng-show="ntCtrl.tickets.length!=0">
+                        <ul class="pagination justify-content-end">
+                            <li ng-class="{disabled: ntCtrl.currentPage == 0}">
+                                <a href ng-click="ntCtrl.prevPage()">« Prev</a>
+                            </li>
+                            <li ng-repeat="n in ntCtrl.range(ntCtrl.display.length, ntCtrl.currentPage, ntCtrl.currentPage + ntCtrl.gap) " ng-class="{active: n == ntCtrl.currentPage}" ng-click="ntCtrl.setPage(n)" ng-show="n>-1">
+                                <a href ng-bind="n+1">1</a>
+                            </li>
+                            <li ng-class="{disabled: (ntCtrl.currentPage) == ntCtrl.display.length - 1}">
+                                <a href ng-click="ntCtrl.nextPage()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tfoot>
+            <tbody>
+                <tr ng-repeat="ticket in ntCtrl.display[ntCtrl.currentPage] | orderBy:ntCtrl.flt_selected.name:ntCtrl.flt_reverse">
+                    <td>{{ticket.tickt}}</td>
+                    <td>{{ticket.ticksub}}</td>
+                    <td>
+                        <a class="btn btn-primary" ui-sref="tickets({ticketId: {{ticket.tickid}} })" ng-click="selectTicket(ticket.tickid); setTab(22)">View</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div ng-show="ntCtrl.tickets.length==0">There are no tickets available to show </div>
+    </div>
+</body>
+
+</html>

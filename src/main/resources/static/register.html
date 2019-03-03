@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html ng-app="register">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>GameTrace Registration</title>
+		
+		<script src="js/angular.js"></script>
+		<script src="js/angular-resource.js"></script>
+		<script src="js/angular-route.js"></script>
+		<script src="js/controllers/register.js" type="text/javascript"></script>
+		<script src="js/jquery-3.1.1.min.js"></script>
+		
+		<link rel="stylesheet" href="css/register.css"></link>
+		<link rel="stylesheet" href="css/bootstrap.css">
+	</head>
+	<body>
+		<div class="row">
+	  		<div class="col-sm-4"></div>
+	  		<div class="col-sm-4">
+	  		<div class="panel panel-default">
+	  		<div class="panel-body">
+	  			<form class="form-signin" name="registerForm" ng-controller="RegistrationController as registerCtrl" ng-submit="registerForm.$valid && registerCtrl.register()" novalidate>
+	  				<h2 align="center">Registration Form</h2>
+	  				<hr>
+	  				<div class="form-group">
+	  					<input ng-model="registerCtrl.user.email" type="text" class="form-control" placeholder="E-mail:" required></input>
+	  				</div>
+	  				<div class="form-group">
+  						<input ng-model="registerCtrl.user.username" type="text" class="form-control" id="UnameInput" placeholder="Username:"></input>
+  					</div>
+  					<div class="row">
+						<div class="col-sm-6 form-group">
+					<div class="form-group">
+	  					<input ng-model="registerCtrl.user.password" type="password" class="form-control" placeholder="Password:" required></input>
+	  				</div>
+	  				</div>
+						<div class="col-sm-6 form-group">
+	  				<div class="form-group">
+	  					<input ng-model="registerCtrl.user.repeated" type="password" class="form-control" placeholder="Repeat password:" required></input>
+	  				</div>
+	  				</div>
+	  				</div>
+	  				<label>Country:</label>
+	  				<div class="form-group">
+	  				<select class="form-control"
+      					ng-options="type.name for type in registerCtrl.type track by type.id"
+      					ng-model="registerCtrl.selected"></select>
+      				</div>
+      				<br>
+      				<label>Month of Birth:</label>
+      				<div class="form-group">
+  					<select class="form-control"
+      					ng-options="month.name for month in registerCtrl.month track by month.id"
+      					ng-model="registerCtrl.selectedMonth"></select>
+      				<label>Day of Birth:</label>
+      				<select class="form-control"
+      					ng-options="day.name for day in registerCtrl.day track by day.id"
+      					ng-model="registerCtrl.selectedDay"></select>
+      				<label>Year of Birth:</label>
+      				<select class="form-control"
+      					ng-options="year.name for year in registerCtrl.year track by year.id"
+      					ng-model="registerCtrl.selectedYear"></select>
+      				</div>
+	  				<hr>
+	  				<h4>Optional Information:</h4>
+	  				<hr>
+	  				<div class="form-group">
+  						<input ng-model="registerCtrl.user.name"  type="text" class="form-control" placeholder="Real Name:"></input>
+  					</div>
+  					
+  					<div class="form-group">
+  						<textarea ng-model="registerCtrl.user.bio" class="form-control" rows="5" id="biography" placeholder="Biography"></textarea>
+  					</div>
+  					<div class="form-group">
+  					<h5>Profile Image:</h5>
+	  					<div class="row">
+							<div class="col-sm-4 form-group">
+			  					<img id="avatar" ng-src="data:image/png;base64,{{registerCtrl.userAvatar}}" height="100" width="100" />
+							</div>
+							<div class="col-sm-4 form-group">
+			  					<input type="file" id="file" accept="image/*" name="file" style="display: none;" ng-model="registerCtrl.userAvatar"/>
+			  					<div class="form-group"><input type="button" class="btn btn-default btn-primary"  id="brButton" value="Browse" onclick="document.getElementById('file').click();" /></div>
+			  					<div class="form-group"><input type="button" class="btn btn-default btn-danger"  id="resButton" value="Reset" ng-click="registerCtrl.removeImg()"/></div>
+		
+			  				</div>
+						</div>
+
+	  				<br>
+
+	  				<fieldset class="form-group">
+	                	<input  type="submit" class="btn btn-lg btn-primary btn-block pull-right" value="Register" />
+	              	</fieldset>
+	  				<fieldset><div align="center" id="RegisterResult">{{registerCtrl.result}}</div></fieldset><br />
+
+	  			</form>
+	  		</div>
+	  		</div>
+	  		</div>
+	  		<div class="col-sm-4"></div>
+	  	</div>
+	</body>
+</html>

@@ -1,0 +1,52 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-xs-12 col-md-4 col-lg-3">
+            <div class="userProfileInfo">
+                <div class="image text-center">
+                    <img ng-src="{{selectedRequest.reqimg}}" height="300" width="200">
+                </div>
+                <div class="box">
+                    <div class="name">
+                        <p align="center"><strong>{{selectedRequest.reqgname}} ({{selectedRequest.reqgrd}})</strong></p>
+                    </div>
+                    <div class="info">
+                        <span><b>Detection Rule:</b> {{selectedRequest.reqdr}}</span>
+                        <span><b>Submitted by:</b> <a ui-sref="users({username: selectedRequest.gameUser.uname })" ng-click="selectUser(selectedRequest.gameUser.uname); setTab(10)">  {{selectedRequest.gameUser.uname}} </a></span>
+                        <span><b>Status:</b> {{selectedRequest.reqstatus}}</span>
+                        <span>
+                           <b>Developer(s):</b> 
+                           <h5 ng-repeat="dev in selectedRequest.gameDevelopers"> <a ui-sref="developers({developerId: {{dev.gdid}} })" ng-click="selectDeveloper(dev.gdid); setTab(16)"> {{dev.gdname}} </a></h5>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div align="center" ng-controller="SpecificRequestUpdateController">
+                <button class="btn btn-default btn-info" ng-hide="!isAuthor(selectedRequest.gameUser.uname) || isAccepted(selectedRequest.reqstatus)" ng-click="open(selectedRequest.reqid)">Update Request</button>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-8 col-lg-9">
+            <div class="box">
+                <div class="col-sm-9">
+                    <div class="tab-content">
+                        <!-- About -->
+                        <div class="userProfileContent">
+                            <div class="i">
+                                <h2 class="boxHeadline"><b>Description</b></h2>
+                                <p>{{selectedRequest.reqdesc}}</p>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

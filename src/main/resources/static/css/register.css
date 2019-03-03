@@ -1,0 +1,7 @@
+@CHARSET "ISO-8859-1";
+
+#brButton {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}

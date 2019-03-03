@@ -1,0 +1,6 @@
+#place images inside this folder
+#game covers are stored inside games folder
+#user profile images should be located within users subdirectory
+#game covers for not yet approved games should be inside requests subfolder
+#images of items should be placed inside items folder
+#game icons are located within icons subdirectory

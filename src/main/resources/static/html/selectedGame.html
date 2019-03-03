@@ -1,0 +1,269 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-4 col-lg-3">
+            <div class="userProfileInfo">
+                <div class="image text-center">
+                    <img ng-src="{{selectedGame.gimg}}" height="300" width="200">
+                </div>
+                <div class="box">
+                    <div class="name">
+                        <p align="center"><strong>{{selectedGame.gamename}} ({{selectedGame.gamery}})</strong></p>
+                    </div>
+                    <div class="info">
+                        <span><b>Playtime:</b> {{selectedGame.gamepday}}d {{selectedGame.gamephour}}h {{selectedGame.gamepmin}}min {{selectedGame.gamepsec}}sec</span>
+                        <span><b>Players:</b> {{selectedGame.gamepn}}</span>
+                        <span><b>Playcount:</b> {{selectedGame.gamepc}}</span>
+                        <span>
+                              <b>Developer(s):</b> 
+                              <h5 ng-repeat="dev in selectedGameDev"> <a ui-sref="developers({developerId: {{dev.gdid}} })" ng-click="selectDeveloper(dev.gdid); setTab(16)"> {{dev.gdname}} </a></h5>
+                           </span>
+                    </div>
+                </div>
+            </div>
+            <div align="center" ng-controller="SpecificGameUpdateController">
+                <button ng-show="isAdmin()" class="btn btn-default btn-info" ng-click="open(selectedGame.gameid)">Update Info</button>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-8 col-lg-9">
+            <div class="box">
+                <div class="col-sm-9">
+                    <div class="tab-content">
+                        <!-- About -->
+                        <div class="userProfileContent">
+                            <div class="i">
+                                <h2 class="boxHeadline"><b>Description</b></h2>
+                                <p>{{selectedGame.gamedesc}}</p>
+                            </div>
+                            <hr>
+                            <div class="i">
+                                <h2 class="boxHeadline"><b>Top Players</b></h2>
+                                <ul class="simpleListings">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Avatar</th>
+                                                <th>Name</th>
+                                                <th>Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="player in players">
+                                                <td><img ng-src="{{player.avatar}}" height="50" width="50" /></td>
+                                                <td>{{player.username}}</td>
+                                                <td>{{player.time}}</td>
+                                                <td>
+                                                    <a class="btn btn-primary" ui-sref="users({username: player.username })" ng-click="selectUser(player.username); setTab(10)">View</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div ng-show="players.length==0 || players==null">No one has played this game yet</div>
+                                </ul>
+                            </div>
+                            <hr>
+                            <div class="i">
+                                <h2 class="boxHeadline">
+                                    <b>Reviews</b>
+                                    <div ng-controller="SpecificReviewAddController">
+                                       <script type="text/ng-template" id="mySpecificReviewContent.html">
+                                          <div class="modal-header">
+                                          			 <h3 class="modal-title"><p align='center'><b>Add New Review</b></p></h3>
+                                          </div>
+                                          <div class="modal-body">
+                                          				<div class="row">
+                                          <div class="col-sm-3"></div>
+                                          <div class="col-sm-6">
+
+                                          <form class="form-signin" name="reviewForm" ng-submit="reviewForm.$valid" novalidate>
+
+                                          <div class="form-group">
+                                          <input ng-model="reviewPackage[0]" type="text" class="form-control" placeholder="Review Title:" required></input>
+                                          </div>
+
+                                          <div class="form-group">
+                                          <textarea ng-model="reviewPackage[2]" class="form-control" rows="7" id="description" placeholder="Review Content:"></textarea>
+                                          </div>
+                                          <fieldset><div id="ReviewAddResult">{{result}}</div></fieldset><br />
+                                          </form>
+
+                                          </div>
+                                          <div class="col-sm-4"></div>
+                                          </div>
+                                          </div>
+                                          <div class="modal-footer">
+                                          				<button class="btn btn-success" ng-click="ok()">Add</button>
+                                          				<button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+                                          </div>
+                                       </script>
+                                       <button class="btn btn-default btn-success" ng-show="isGameUser()" ng-click="open()">Add Review</button>
+                                    </div>
+                                 </h2>
+                                <div class="media" ng-repeat="review in displayReviews[currentPageReviews]">
+                                    <a class="pull-left" ui-sref="users({username: review.gtUser.uname })" ng-click="selectUser(review.gtUser.uname); setTab(10)">
+                                        <img title="{{review.gtUser.uname}}" ng-src="{{review.gtUser.uavat}}" height="50" width="50">
+                                    </a>
+                                    <div ng-controller="SpecificReviewUpdateController">
+                                        <script type="text/ng-template" id="updateSpecificReviewContent.html">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title"><p align='center'><b>Update Your Review</b></p></h3>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-sm-3"></div>
+                                                    <div class="col-sm-6">
+
+                                                        <form class="form-signin" name="reviewForm" ng-submit="reviewForm.$valid" novalidate>
+
+                                                            <div class="form-group">
+                                                                <input ng-model="reviewPackage[0]" type="text" class="form-control" placeholder="Review Title:" required></input>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <textarea ng-model="reviewPackage[2]" class="form-control" rows="7" id="description" placeholder="Review Content:"></textarea>
+                                                            </div>
+                                                            <fieldset>
+                                                                <div id="ReviewUpdateResult">{{result}}</div>
+                                                            </fieldset>
+                                                            <br />
+                                                        </form>
+
+                                                    </div>
+                                                    <div class="col-sm-4"></div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-info" ng-click="ok()">Update</button>
+                                                <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+                                            </div>
+                                        </script>
+                                        <div class="media-body">
+                                            <h4 class="media-heading">{{review.revtitle}}
+                                             <small>by {{review.gtUser.uname}} on {{review.revdate}}</small><button ng-show="isAuthor(review.gtUser.uname)" ng-click="open(review.revid,review.gameGameid,review.userUname)" class="btn btn-default btn-info pull-right"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+                                          </h4> {{review.revcont}}
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                                <tfoot>
+                                    <td colspan="6">
+                                        <div class="pagination pull-right" ng-show="displayReviews.length>1">
+                                            <ul class="pagination justify-content-end">
+                                                <li ng-class="{disabled: currentPageReviews == 0}">
+                                                    <a href ng-click="prevPageReviews()">« Prev</a>
+                                                </li>
+                                                <li ng-repeat="n in range(displayReviews.length, currentPageReviews, currentPageReviews + gap) " ng-class="{active: n == currentPageReviews}" ng-click="setPageReviews(n)" ng-show="n>-1">
+                                                    <a href ng-bind="n+1">1</a>
+                                                </li>
+                                                <li ng-class="{disabled: (currentPageReviews) == displayReviews.length - 1}">
+                                                    <a href ng-click="nextPageReviews()">Next »</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tfoot>
+                                <div ng-show="reviews.length==0  || reviews==null">There are no reviews available to show</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Activities -->
+                </div>
+                <div class="col-sm-3 sidenav">
+                    <h3>
+                           Guides
+                           <div ng-controller="SpecificGuideAddController">
+                              <script type="text/ng-template" id="mySpecificGuideContent.html">
+                                 <div class="modal-header">
+                                 			 <h3 class="modal-title"><p align='center'><b>Add New Guide</b></p></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-6">
+
+                            <form class="form-signin" name="guideForm" ng-submit="guideForm.$valid" novalidate>
+
+                                <div class="form-group">
+                                    <input ng-model="guidePackage[0]" type="text" class="form-control" placeholder="Guide Title:" required></input>
+                                </div>
+
+                                <div class="form-group">
+                                    <textarea ng-model="guidePackage[2]" class="form-control" rows="7" id="description" placeholder="Guide Content:"></textarea>
+                                </div>
+                                <fieldset>
+                                    <div id="SpecificGuideAddResult">{{result}}</div>
+                                </fieldset>
+                                <br />
+                            </form>
+
+                        </div>
+                        <div class="col-sm-4"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" ng-click="ok()">Add</button>
+                    <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+                </div>
+                </script>
+                <button class="btn btn-default btn-success" ng-show="isGameUser()" ng-click="open()">Create Guide</button>
+            </div>
+            </h3>
+            <ul class="simpleListings">
+                <li ng-repeat="guide in displayGuides[currentPageGuides]"><a ui-sref="guides({guideId: {{guide.guid}}, guideGameId: {{guide.gameGameid}}, guideUsername: guide.gameUserUname })" ng-click="selectGuide(guide.guid, guide.gameGameid, guide.gameUserUname); setTab(13)">{{guide.guname}}</a> by <a ui-sref="users({username: guide.gameUserUname })" ng-click="selectUser(guide.gameUserUname); setTab(10)">{{guide.gameUserUname}}</a> </li>
+            </ul>
+            <tfoot>
+                <td colspan="6">
+                    <div class="pagination pull-right" ng-show="displayGuides.length>1">
+                        <ul class="pagination justify-content-end">
+                            <li ng-class="{disabled: currentPageGuides == 0}">
+                                <a href ng-click="prevPageGuides()">« Prev</a>
+                            </li>
+                            <li ng-repeat="n in range(displayGuides.length, currentPageGuides, currentPageGuides + gap) " ng-class="{active: n == currentPageGuides}" ng-click="setPageGuides(n)" ng-show="n>-1">
+                                <a href ng-bind="n+1">1</a>
+                            </li>
+                            <li ng-class="{disabled: (currentPageGuides) == displayGuides.length - 1}">
+                                <a href ng-click="nextPageGuides()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tfoot>
+            <div ng-show="guides.length==0  || guides==null">There are no guides available to show</div>
+            <hr>
+            <h3>Streamers</h3>
+            <ul class="simpleListings">
+                <li ng-repeat="streamer in displayStreamers[currentPageStreamers]"><a ng-href='{{streamer.strurl}}'>{{streamer.strname}}</a> </li>
+            </ul>
+            <tfoot>
+                <td colspan="6">
+                    <div class="pagination pull-right" ng-show="displayStreamers.length>1">
+                        <ul class="pagination justify-content-end">
+                            <li ng-class="{disabled: currentPageStreamers == 0}">
+                                <a href ng-click="prevPageStreamers()">« Prev</a>
+                            </li>
+                            <li ng-repeat="n in range(displayStreamers.length, currentPageStreamers, currentPageStreamers + gap) " ng-class="{active: n == currentPageStreamers}" ng-click="setPageStreamers(n)" ng-show="n>-1">
+                                <a href ng-bind="n+1">1</a>
+                            </li>
+                            <li ng-class="{disabled: (currentPageStreamers) == displayStreamers.length - 1}">
+                                <a href ng-click="nextPageStreamers()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tfoot>
+            <div ng-show="streamers.length==0  || streamers==null">There are no streamers available to show</div>
+            <hr>
+        </div>
+    </div>
+    </div>
+    </div>
+
+</body>
+
+</html>

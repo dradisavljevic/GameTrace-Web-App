@@ -1,0 +1,67 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div class="col-sm-8">
+        <table class="table table-hover">
+            <thead>
+                <tr ng-show="freqCtrl.display.length>1" align="center">
+                    <td colspan="6">
+                        <div class="pagination-centered" ng-show="freqCtrl.requests.length!=0">
+                            <ul class="pagination justify-content-end">
+                                <li ng-class="{disabled: freqCtrl.currentPage == 0}">
+                                    <a href ng-click="freqCtrl.prevPage()">« Prev</a>
+                                </li>
+                                <li ng-repeat="n in freqCtrl.range(freqCtrl.display.length, freqCtrl.currentPage, freqCtrl.currentPage + freqCtrl.gap) " ng-class="{active: n == freqCtrl.currentPage}" ng-click="freqCtrl.setPage(n)" ng-show="n>-1">
+                                    <a href ng-bind="n+1">1</a>
+                                </li>
+                                <li ng-class="{disabled: (freqCtrl.currentPage) == freqCtrl.display.length - 1}">
+                                    <a href ng-click="freqCtrl.nextPage()">Next »</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Sent By</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tfoot ng-show="freqCtrl.display.length>1" align="center">
+                <td colspan="6">
+                    <div class="pagination-centered" ng-show="freqCtrl.requests.length!=0">
+                        <ul class="pagination justify-content-end">
+                            <li ng-class="{disabled: freqCtrl.currentPage == 0}">
+                                <a href ng-click="freqCtrl.prevPage()">« Prev</a>
+                            </li>
+                            <li ng-repeat="n in freqCtrl.range(freqCtrl.display.length, freqCtrl.currentPage, freqCtrl.currentPage + freqCtrl.gap) " ng-class="{active: n == freqCtrl.currentPage}" ng-click="freqCtrl.setPage(n)" ng-show="n>-1">
+                                <a href ng-bind="n+1">1</a>
+                            </li>
+                            <li ng-class="{disabled: (freqCtrl.currentPage) == freqCtrl.display.length - 1}">
+                                <a href ng-click="freqCtrl.nextPage()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tfoot>
+            <tbody>
+                <tr ng-repeat="req in freqCtrl.display[freqCtrl.currentPage]">
+                    <td><a ui-sref="users({username: req.sender })" ng-click="selectUser(req.sender); setTab(10)">{{req.sender}}</a></td>
+                    <td>{{req.reqdate}}</td>
+                    <td>
+                        <button class="btn btn-success" ng-click="freqCtrl.accept(req.frid)">Accept</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-default btn-danger" ng-click="freqCtrl.decline(req.frid)">Decline</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div ng-show="freqCtrl.requests.length==0">There are no new requests </div>
+    </div>
+</body>
+
+</html>

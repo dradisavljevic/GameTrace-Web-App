@@ -1,0 +1,171 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div ng-controller="GuideAddController">
+        <script type="text/ng-template" id="myGuideContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title"><p align='center'><b>Add New Guide</b></p></h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6">
+
+                        <form class="form-signin" name="guideForm" ng-submit="guideForm.$valid" novalidate>
+
+                            <div class="form-group">
+                                <input ng-model="guidePackage[0]" type="text" class="form-control" placeholder="Guide Title:" required></input>
+                            </div>
+                            <label>Game:</label>
+                            <select class="form-control" ng-options="game.gamename for game in guidePackage[3] track by game.gameid" ng-model="guidePackage[1]"></select>
+                            <br>
+                            <div class="form-group">
+                                <textarea ng-model="guidePackage[2]" class="form-control" rows="7" id="description" placeholder="Guide Content:"></textarea>
+                            </div>
+                            <fieldset>
+                                <div id="GuideAddResult">{{result}}</div>
+                            </fieldset>
+                            <br />
+                        </form>
+
+                    </div>
+                    <div class="col-sm-4"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="ok()">Add</button>
+                <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+        <button class="btn btn-default btn-success" ng-show="isGameUser()" ng-click="open()">Create Guide</button>
+    </div>
+    <div class="col-sm-8">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-4">Order by (on page):</label>
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <select class="form-control" ng-options="filter.label for filter in guideCtrl.filters track by filter.id" ng-model="guideCtrl.flt_selected">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Ascending" ng-click="guideCtrl.asc()">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Descending" ng-click="guideCtrl.desc()">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Reset" ng-click="guideCtrl.reset()">
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search (by selected above):" ng-model="guideCtrl.filter">
+                <div class="input-group-btn">
+                    <input type="button" class="btn btn-default btn-primary" value="Search" ng-click="guideCtrl.select()">
+                </div>
+            </div>
+        </form>
+        <br/>
+        <table class="table table-hover">
+            <thead>
+                <tr ng-show="guideCtrl.display.length>1" align="center">
+                    <td colspan="6">
+                        <div class="pagination-centered" ng-show="guideCtrl.guides.length!=0">
+                            <ul class="pagination justify-content-end">
+                                <li ng-class="{disabled: guideCtrl.currentPage == 0}">
+                                    <a href ng-click="guideCtrl.prevPage()">« Prev</a>
+                                </li>
+                                <li ng-repeat="n in guideCtrl.range(guideCtrl.display.length, guideCtrl.currentPage, guideCtrl.currentPage + guideCtrl.gap) " ng-class="{active: n == guideCtrl.currentPage}" ng-click="guideCtrl.setPage(n)" ng-show="n>-1">
+                                    <a href ng-bind="n+1">1</a>
+                                </li>
+                                <li ng-class="{disabled: (guideCtrl.currentPage) == guideCtrl.display.length - 1}">
+                                    <a href ng-click="guideCtrl.nextPage()">Next »</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Guide Title</th>
+                    <th>Game Name</th>
+                    <th>Guide Author</th>
+                </tr>
+            </thead>
+            <tfoot ng-show="guideCtrl.display.length>1" align="center">
+                <td colspan="6">
+                    <div class="pagination-centered" ng-show="guideCtrl.guides.length!=0">
+                        <ul class="pagination justify-content-end">
+                            <li ng-class="{disabled: guideCtrl.currentPage == 0}">
+                                <a href ng-click="guideCtrl.prevPage()">« Prev</a>
+                            </li>
+                            <li ng-repeat="n in guideCtrl.range(guideCtrl.display.length, guideCtrl.currentPage, guideCtrl.currentPage + guideCtrl.gap) " ng-class="{active: n == guideCtrl.currentPage}" ng-click="guideCtrl.setPage(n)" ng-show="n>-1">
+                                <a href ng-bind="n+1">1</a>
+                            </li>
+                            <li ng-class="{disabled: (guideCtrl.currentPage) == guideCtrl.display.length - 1}">
+                                <a href ng-click="guideCtrl.nextPage()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tfoot>
+            <tbody>
+                <tr ng-repeat="guide in guideCtrl.display[guideCtrl.currentPage] | orderBy:guideCtrl.flt_selected.name:guideCtrl.flt_reverse">
+                    <td>{{guide.guname}}</td>
+                    <td>{{guide.gameFullName}}</td>
+                    <td>{{guide.gameUserUname}}</td>
+                    <td>
+                        <a class="btn btn-primary" ui-sref="guides({guideId: {{guide.guid}}, guideGameId: {{guide.gameGameid}}, guideUsername: guide.gameUserUname })" ng-click="selectGuide(guide.guid, guide.gameGameid, guide.gameUserUname); setTab(13)">View</a>
+                    </td>
+                    <td>
+                        <div ng-controller="GuideUpdateController">
+                            <script type="text/ng-template" id="updateGuideContent.html">
+                                <div class="modal-header">
+                                    <h3 class="modal-title"><p align='center'><b>Update Guide</b></p></h3>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-sm-3"></div>
+                                        <div class="col-sm-6">
+
+                                            <form class="form-signin" name="guideForm" ng-submit="guideForm.$valid" novalidate>
+
+                                                <div class="form-group">
+                                                    <input ng-model="guidePackage[0]" type="text" class="form-control" placeholder="Guide Title:" required></input>
+                                                </div>
+                                                <div class="form-group">
+                                                    <textarea ng-model="guidePackage[1]" class="form-control" rows="7" id="description" placeholder="Guide Content:"></textarea>
+                                                </div>
+                                                <fieldset>
+                                                    <div id="GuideUpdateResult">{{result}}</div>
+                                                </fieldset>
+                                                <br />
+                                            </form>
+
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-info" ng-click="ok()">Update</button>
+                                    <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+                                </div>
+                            </script>
+                            <button class="btn btn-default btn-info" ng-show="isAdmin() || isAuthor(guide.gameUserUname)" ng-click="open(guide.guid, guide.gameGameid, guide.gameUserUname)">Update</button>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-default btn-danger" ng-show="isAdmin() || isAuthor(guide.gameUserUname)" ng-really-click="guideCtrl.removeGuide(guide.guid, guide.gameGameid, guide.gameUserUname)" ng-really-message="Are you sure you want to delete the guide {{guide.guname}} for {{guide.gameFullName}}?">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div ng-show="guideCtrl.guides.length==0">There are no guides available to show </div>
+    </div>
+</body>
+
+</html>

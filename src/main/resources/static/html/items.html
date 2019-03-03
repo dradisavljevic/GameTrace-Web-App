@@ -1,0 +1,270 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div ng-controller="ItemAddController" class="col-sm-16">
+        <script type="text/ng-template" id="myItemContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title"><p align='center'><b>Sell New Item</b></p></h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6">
+
+                        <form class="form-signin" name="itemForm" ng-submit="itemForm.$valid" novalidate>
+
+                            <div class="form-group">
+                                <input ng-model="itemPackage[0]" type="text" class="form-control" placeholder="Item Name:" required></input>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-4 form-group" style="height: 30px; line-height: 30px;">
+                                    <label> Quantity: </label>
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    <div class="form-group">
+                                        <input type="number" ng-model="itemPackage[7]" class="form-control" min="1" max="20" required></input>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6 form-group">
+                                    <div class="form-group">
+                                        <input ng-model="itemPackage[1]" type="number" min="0" class="form-control" placeholder="Price:" required></input>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    <div class="form-group">
+                                        <select class="form-control" ng-options="currency.name for currency in currencies track by currency.id" ng-model="itemPackage[2]">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>Item Image:</label>
+                            <div class="row">
+                                <div class="col-sm-4 form-group">
+                                    <img id="itemImg" ng-src="{{itemPackage[3]}}" height="100" width="100" />
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <input type="file" id="fileItem" name="file" accept="image/*" style="display: none;" fileread="itemPackage[3]" />
+                                    <div class="form-group">
+                                        <input type="button" class="btn btn-default btn-primary" id="brIButton" value="Browse" onclick="document.getElementById('fileItem').click();" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="button" class="btn btn-default btn-danger" id="resIButton" value="Reset" ng-click="removeImg()" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <label>Game:</label>
+                            <select class="form-control" ng-options="game.gamename for game in itemPackage[6] track by game.gameid" ng-model="itemPackage[5]"></select>
+                            <br>
+
+                            <fieldset>
+                                <div id="ItemAddResult">{{result}}</div>
+                            </fieldset>
+                            <br />
+
+                        </form>
+
+                    </div>
+                    <div class="col-sm-4"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" ng-click="ok()">Add</button>
+                <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+        <div class="col-sm-3">
+            <button ng-show="isGameUser()" class="btn btn-default btn-success" ng-click="open()">Add Item</button>
+        </div>
+        <div class="col-sm-3">
+            <a ui-sref="root({rootPath: 25 })" ng-click="setTab(25)" ng-show="isGameUser()" class="btn btn-default btn-info">My Ongoing Buy Deals</a>
+        </div>
+        <div class="col-sm-3">
+            <a ui-sref="root({rootPath: 26 })" ng-click="setTab(26)" ng-show="isGameUser()" class="btn btn-default btn-warning">My Ongoing Sell Deals</a>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="col-sm-8">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-4">Order by (on page):</label>
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <select class="form-control" ng-options="filter.label for filter in itemCtrl.filters track by filter.id" ng-model="itemCtrl.flt_selected">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Ascending" ng-click="itemCtrl.asc()">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Descending" ng-click="itemCtrl.desc()">
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="button" class="btn btn-default btn-primary" value="Reset" ng-click="itemCtrl.reset()">
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search (by selected above):" ng-model="itemCtrl.filter">
+                <div class="input-group-btn">
+                    <input type="button" class="btn btn-default btn-primary" value="Search" ng-click="itemCtrl.select()">
+                </div>
+            </div>
+        </form>
+        <br/>
+        <table class="table table-hover">
+            <thead>
+                <tr ng-show="itemCtrl.display.length>1" align="center">
+                    <td colspan="6">
+                        <div class="pagination-centered" ng-show="itemCtrl.items.length!=0">
+                            <ul class="pagination justify-content-end">
+                                <li ng-class="{disabled: itemCtrl.currentPage == 0}">
+                                    <a href ng-click="itemCtrl.prevPage()">« Prev</a>
+                                </li>
+                                <li ng-repeat="n in itemCtrl.range(itemCtrl.display.length, itemCtrl.currentPage, itemCtrl.currentPage + itemCtrl.gap) " ng-class="{active: n == itemCtrl.currentPage}" ng-click="itemCtrl.setPage(n)" ng-show="n>-1">
+                                    <a href ng-bind="n+1">1</a>
+                                </li>
+                                <li ng-class="{disabled: (itemCtrl.currentPage) == itemCtrl.display.length - 1}">
+                                    <a href ng-click="itemCtrl.nextPage()">Next »</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Image</th>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Video Game</th>
+                    <th>Item Price</th>
+                    <th>Currency</th>
+                    <th>Seller</th>
+                </tr>
+            </thead>
+            <tfoot ng-show="itemCtrl.display.length>1" align="center">
+                <td colspan="6">
+                    <div class="pagination-centered" ng-show="itemCtrl.items.length!=0">
+                        <ul class="pagination justify-content-end">
+                            <li ng-class="{disabled: itemCtrl.currentPage == 0}">
+                                <a href ng-click="itemCtrl.prevPage()">« Prev</a>
+                            </li>
+                            <li ng-repeat="n in itemCtrl.range(itemCtrl.display.length, itemCtrl.currentPage, itemCtrl.currentPage + itemCtrl.gap) " ng-class="{active: n == itemCtrl.currentPage}" ng-click="itemCtrl.setPage(n)" ng-show="n>-1">
+                                <a href ng-bind="n+1">1</a>
+                            </li>
+                            <li ng-class="{disabled: (itemCtrl.currentPage) == itemCtrl.display.length - 1}">
+                                <a href ng-click="itemCtrl.nextPage()">Next »</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tfoot>
+            <tbody>
+                <tr ng-repeat="item in itemCtrl.display[itemCtrl.currentPage] | orderBy:itemCtrl.flt_selected.name:itemCtrl.flt_reverse">
+                    <td><img ng-src="{{item.itemim}}" height="150" width="150" /></td>
+                    <td>{{item.itemname}}</td>
+                    <td>{{item.itemq}}</td>
+                    <td>{{item.game.gamename}} ({{item.game.gamery}})</td>
+                    <td>{{item.itemprice}}</td>
+                    <td>{{item.itemcurr}}</td>
+                    <td>{{item.gameUser.uname}}</td>
+                    <td>
+                        <a class="btn btn-primary" ui-sref="items({itemId: {{item.itemid}}, itemSell: item.gameUserUname })" ng-click="selectItem(item.itemid, item.gameUserUname); setTab(18)">
+                        View
+                        </a>
+                    </td>
+                    <td>
+                        <div ng-controller="ItemUpdateController">
+                            <script type="text/ng-template" id="updateItemContent.html">
+                                <div class="modal-header">
+                                    <h3 class="modal-title"><p align='center'><b>Update Item</b></p></h3>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-sm-3"></div>
+                                        <div class="col-sm-6">
+
+                                            <form class="form-signin" name="itemForm" ng-submit="itemForm.$valid" novalidate>
+
+                                                <div class="form-group">
+                                                    <input ng-model="itemPackage[0]" type="text" class="form-control" placeholder="Item Name:" required></input>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-4 form-group" style="height: 30px; line-height: 30px;">
+                                                        <label> Quantity: </label>
+                                                    </div>
+                                                    <div class="col-sm-6 form-group">
+                                                        <div class="form-group">
+                                                            <input type="number" ng-model="itemPackage[8]" class="form-control" min="1" max="20" required></input>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6 form-group">
+                                                        <div class="form-group">
+                                                            <input ng-model="itemPackage[1]" type="number" min="0" class="form-control" placeholder="Price:" required></input>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 form-group">
+                                                        <div class="form-group">
+                                                            <select class="form-control" ng-options="currency.name for currency in currencies track by currency.id" ng-model="itemPackage[2]">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <label>Item Image:</label>
+                                                <div class="row">
+                                                    <div class="col-sm-4 form-group">
+                                                        <img id="itemUpdateImg" ng-src="{{itemPackage[3]}}" height="100" width="100" />
+                                                    </div>
+                                                    <div class="col-sm-4 form-group">
+                                                        <input type="file" id="fileUpdateItem" name="file" accept="image/*" style="display: none;" fileread="itemPackage[3]" />
+                                                        <div class="form-group">
+                                                            <input type="button" class="btn btn-default btn-primary" id="brIButton" value="Browse" onclick="document.getElementById('fileUpdateItem').click();" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input type="button" class="btn btn-default btn-danger" id="resIButton" value="Reset" ng-click="removeImg()" />
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <fieldset>
+                                                    <div id="ItemUpdateResult">{{result}}</div>
+                                                </fieldset>
+                                                <br />
+
+                                            </form>
+
+                                        </div>
+                                        <div class="col-sm-4"></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-info" ng-click="ok()">Update</button>
+                                    <button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+                                </div>
+                            </script>
+                            <button class="btn btn-default btn-info" ng-show="(isAdmin() || isAuthor(item.gameUser.uname)) && itemCtrl.isInStock(item.itemstat)" ng-click="open(item.itemid, item.gameUser.uname)">Update</button>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-default btn-danger" ng-show="(isAdmin() || isAuthor(item.gameUser.uname)) && itemCtrl.isInStock(item.itemstat)" ng-really-click="itemCtrl.removeItem(item.itemid, item.gameUser.uname)" ng-really-message="Are you sure you want to delete the item {{item.itemname}} (x{{item.itemq}})?">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div ng-show="itemCtrl.items.length==0">There are no items available to show</div>
+    </div>
+</body>
+
+</html>

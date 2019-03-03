@@ -1,0 +1,40 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <div class="container" align-content="flex-start">
+        <h1 class="my-4" align="center">{{selectedDeveloper.gdname}} Games</h1>
+        <hr>
+        <div class="row" align-content="flex-start">
+            <h3 class="my-4" align="center" ng-show="displayDevelopedGames.length==0">There are currently no games developed by this developer in our database.</h3>
+            <div class="col-lg-2 col-md-3 col-sm-4 portfolio-item" ng-repeat="game in displayDevelopedGames[currentPageDevelopedGames] ">
+                <div class="card h-100">
+                    <img align="middle" class="card-img-top" ng-src="{{game.gimg}}" height="225" width="150" />
+                    <div class="card-body">
+                        <h6 align="center" class="card-title"><a ui-sref="games({gamesId: {{game.gameid}} })" ng-click="selectGame(game.gameid); setTab(9)">{{game.gamename}} ({{game.gamery}})</a></h6>
+                        <p align="center" class="card-text">{{game.gamepday}}d {{game.gamephour}}h {{game.gamepmin}}min {{game.gamepsec}}sec</p>
+                        <p align="center" class="card-text">By {{game.gamepn}} players</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center" ng-show="displayDevelopedGames.length>1">
+        <ul class="pagination justify-content-center">
+            <li ng-class="{disabled: currentPageDevelopedGames == 0}">
+                <a href ng-click="prevPageDevelopedGames()">« Prev</a>
+            </li>
+            <li ng-repeat="n in range(displayDevelopedGames.length, currentPageDevelopedGames, currentPageDevelopedGames + gap) " ng-class="{active: n == currentPageDevelopedGames}" ng-click="setPageDevelopedGames(n)" ng-show="n>-1">
+                <a href ng-bind="n+1">1</a>
+            </li>
+            <li ng-class="{disabled: (currentPageDevelopedGames) == displayDevelopedGames.length - 1}">
+                <a href ng-click="nextPageDevelopedGames()">Next »</a>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>
