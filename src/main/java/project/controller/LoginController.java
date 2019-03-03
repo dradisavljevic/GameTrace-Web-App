@@ -1,5 +1,6 @@
 package project.controller;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,14 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.google.common.hash.Hashing;
+
 import project.domain.Active;
 import project.domain.GtUser;
-import project.domain.Player;
-import project.domain.dto.PlayerDTO;
 import project.domain.dto.UserDTO;
 import project.service.ActiveService;
 import project.service.GtUserService;
-import project.service.PlayService;
 
 
 @RequestMapping("/login")
@@ -72,9 +72,14 @@ public class LoginController {
 		
 		GtUser user = gtUserService.getGtUserByName(usr.getUname());
 		
+		String sha256hex = Hashing.sha256()
+				  .hashString(usr.getPword(), StandardCharsets.UTF_8)
+				  .toString();
 		
+		System.out.println(sha256hex);
+
 		if (user != null) {
-			if (usr.getPword().equals(user.getPword())) {
+			if (sha256hex.equals(user.getPword())) {
 				
 				List<Active> actives = activeService.findAllActivebyUsername(user.getUname());
 				

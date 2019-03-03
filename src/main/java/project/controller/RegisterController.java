@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.google.common.hash.Hashing;
+
 import sun.misc.BASE64Decoder;
 
 import project.domain.GameUser;
@@ -111,10 +115,14 @@ public class RegisterController {
 			return "redirect:/register.html";
 		}
 		
+		String sha256hex = Hashing.sha256()
+				  .hashString(tok.getTokpw(), StandardCharsets.UTF_8)
+				  .toString();
+		
 		GtUser gt = new GtUser();
 		gt.setUemail(tok.getTokem());
 		gt.setUname(tok.getTokun());
-		gt.setPword(tok.getTokpw());
+		gt.setPword(sha256hex);
 		BigDecimal type = new BigDecimal(1);
 		gt.setUserut(type);
 		int year = Calendar.getInstance().get(Calendar.YEAR);

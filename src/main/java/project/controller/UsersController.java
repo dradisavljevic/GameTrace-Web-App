@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.google.common.hash.Hashing;
 
 import project.domain.Achievement;
 import project.domain.Active;
@@ -369,10 +372,14 @@ public class UsersController {
 				return new ResponseEntity<String>("User with the desired email address already exists.", HttpStatus.OK);
 			}
 			
+			String sha256hex = Hashing.sha256()
+					  .hashString(data.getPword(), StandardCharsets.UTF_8)
+					  .toString();
+			
 			final String dir = System.getProperty("user.dir");
 			GtUser user = new GtUser();
 			user.setUname(data.getUname());
-			user.setPword(data.getPword());
+			user.setPword(sha256hex);
 			user.setUserut(new BigDecimal(0));
 			user.setUemail(data.getUemail());
 			
